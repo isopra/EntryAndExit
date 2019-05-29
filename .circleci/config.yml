@@ -34,9 +34,9 @@ jobs:
           name: compile
           command: mvn compile
       - persist_to_workspace:
-          root: target
+          root: .
           paths:
-            - .
+            - ./target
   test:
     executor:
       name: default
@@ -62,9 +62,9 @@ jobs:
           name: test
           command: mvn test
       - persist_to_workspace:
-          root: target
+          root: .
           paths:
-            - .
+            - ./target
   package:
     executor:
       name: default
@@ -90,31 +90,34 @@ jobs:
           name: move artifacts
           command: |
             mkdir artifacts
-            cp ./target/*-SNAPSHOT.jar ./artifacts/
+            cp ./target/lunch-map-*-SNAPSHOT.jar ./artifacts/
       - store_artifacts:
           path: ./artifacts
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./target
   deploy:
     executor:
       name: default
     steps:
       - attach_workspace:
           at: .
+      - add_ssh_keys:
+          fingerprints:
+            - "b7:0a:43:d2:3c:e0:6e:89:f3:d6:fe:ac:bb:7e:d1:16"
       - run:
-          name: start ssh-agent
-          command: eval $(ssh-agent -s)
-      - run:
-          name: set private key
-          command: | 
-            echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-            mkdir -p ~/.ssh
-            chmod 700 ~/.ssh
+          name: add SSH
+          command: |
             ssh-keyscan ${DEPLOY_HOST} >> ~/.ssh/known_hosts
       - run:
-          name: Copy jar
-          command: scp ./target/*-SNAPSHOT.jar ${DEPLOY_USER}@${DEPLOY_HOST}:~/deploy/deploy.jar
-      - run:
-          name: restart service
-          command: ssh ${DEPLOY_USER}@${DEPLOY_HOST} "sudo service spring-boot stop && \cp -f --preserve=mode,ownership ~/deploy/deploy.jar ~/deploy/spring-boot.jar && sudo service spring-boot start && rm ~/deploy/deploy.jar"
+          name: deploy
+          command: |
+            scp ./target/*-SNAPSHOT.jar ${DEPLOY_USER}@${DEPLOY_HOST}:~/deploy/deploy.jar
+            ssh ${DEPLOY_USER}@${DEPLOY_HOST} "sudo service spring-boot stop"
+            ssh ${DEPLOY_USER}@${DEPLOY_HOST} "\cp -f --preserve=mode,ownership ~/deploy/deploy.jar ~/deploy/spring-boot.jar"
+            ssh ${DEPLOY_USER}@${DEPLOY_HOST} "sudo service spring-boot start"
+            ssh ${DEPLOY_USER}@${DEPLOY_HOST} "rm ~/deploy/deploy.jar"
 workflows:
   build-and-test-and-deploy:
     jobs:
