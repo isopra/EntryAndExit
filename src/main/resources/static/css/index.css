@@ -1,0 +1,42 @@
+@charset "UTF-8";
+h1 {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+body {
+    text-align: center;
+}
+
+#container {
+	margin-left: auto;
+	margin-right: auto;
+    width: 500px;
+}
+
+.entryExit {
+	width: 45%;
+	height: 150px;
+	font-size: 30px;
+	margin-bottom: 5px;
+}
+
+#record {
+	width: 91%;
+	height: 80px;
+	font-size: 25px;
+	margin-bottom: 5px;
+}
+
+#member {
+	width: 91%;
+	height: 60px;
+	font-size: 20px;
+	margin-bottom: 5px;
+}
+
+#location {
+	width: 91%;
+	height: 60px;
+	font-size: 20px;
+}
