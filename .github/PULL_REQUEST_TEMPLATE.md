@@ -1,13 +1,3 @@
----
-name: Feature
-about: PullRequest テンプレート
-title: 画面名を記入
-labels: ''
-assignees: ''
-
-
-
----
 ## issue
 closes #0 <!-- 該当するissue番号を記入 -->
 
