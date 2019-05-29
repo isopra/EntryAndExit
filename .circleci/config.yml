@@ -90,7 +90,7 @@ jobs:
           name: move artifacts
           command: |
             mkdir artifacts
-            cp ./target/lunch-map-*-SNAPSHOT.jar ./artifacts/
+            cp ./target/*-SNAPSHOT.jar ./artifacts/
       - store_artifacts:
           path: ./artifacts
       - persist_to_workspace:
