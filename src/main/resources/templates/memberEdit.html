@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>入退室管理</title>
+	<meta http-equiv="Content-Type"
+    	content="text/html; charset=UTF-8" />
+    <link href="/css/memberEdit.css" th:href="@{/css/memberEdit.css}" rel="stylesheet" >
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+	<div id="container">
+		<h1>メンバー登録・編集</h1>
+		<form action="/member">
+			<input type="submit" value="戻る" id="return"/>
+		</form>
+		<div id="border">
+			<p class="gap">ID : </p>
+			<div class="gap">氏名 : <input type="text"/></div>
+			<form action="/memberFace">
+				<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon"/></p>
+			</form>
+		</div>
+		<form action="/member">
+			<div class="wrapper"><input type="submit" value="登録" id="regist"/></div>
+		</form>
+	</div>
+</body>
+</html>

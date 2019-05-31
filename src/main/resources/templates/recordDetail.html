@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>入退室管理</title>
+	<meta http-equiv="Content-Type"
+    	content="text/html; charset=UTF-8" />
+    <link href="/css/recordDetail.css" th:href="@{/css/recordDetail.css}" rel="stylesheet" >
+</head>
+<body>
+	<div id="container">
+		<h1>入退出管理　登録</h1>
+		<div id="border">
+			<p class="gap">日付 : </p>
+			<div class="gap">拠点 :
+			<select name="example">
+				<option value="東京オフィス">東京オフィス</option>
+			</select>
+			</div>
+			<p class="gap">入室者 : </p>
+			<p class="gap">入室時刻 : </p>
+		</div>
+		<div id="inline">
+			<form action="/">
+				<input type="submit" value="キャンセル" id="cancel"/>
+			</form>
+			<form action="/">
+				<input type="submit" value="登録" id="regist"/>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

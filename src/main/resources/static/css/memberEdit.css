@@ -1,0 +1,53 @@
+@charset "UTF-8";
+
+#container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+}
+
+h1{
+	text-align: center;
+    padding-bottom: 20px;
+}
+
+#return {
+	width: 130px;
+	height: 80px;
+	font-size: 20px;
+	margin-left: 50px;
+}
+
+.gap{
+	margin-left: 10px;
+}
+
+#border {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	border: solid 2px black;
+	width: 300px;
+	height: 150px;
+}
+
+.wrapper {
+	text-align: center;
+}
+
+#regist {
+	width: 130px;
+	height: 80px;
+	margin-top: 5px;
+	font-size: 20px;
+}
+
+.fas {
+
+}
+
+#icon {
+	width: 50px;
+	height: 40px;
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>入退室管理</title>
+	<meta http-equiv="Content-Type"
+    	content="text/html; charset=UTF-8" />
+    <link href="/css/locationEdit.css" th:href="@{/css/locationEdit.css}" rel="stylesheet" >
+</head>
+<body>
+	<div id="container">
+		<h1>拠点管理　登録・編集</h1>
+		<div id="border">
+			<p class="gap">ID : </p>
+			<div class="gap">拠点名 : <input type="text"/></div>
+		</div>
+		<div id="inline">
+			<form action="/location">
+				<input type="submit" value="キャンセル" class="size" id="cancel"/>
+			</form>
+			<form action="/location">
+				<input type="submit" value="登録" class="size" id="regist"/>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
