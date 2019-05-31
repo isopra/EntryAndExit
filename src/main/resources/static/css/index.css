@@ -14,29 +14,33 @@ body {
     width: 500px;
 }
 
+#inline {
+	display: inline-flex;
+}
+
 .entryExit {
-	width: 45%;
+	width: 220px;
 	height: 150px;
 	font-size: 30px;
-	margin-bottom: 5px;
+	margin: 5px;
 }
 
 #record {
-	width: 91%;
+	width: 450px;
 	height: 80px;
 	font-size: 25px;
 	margin-bottom: 5px;
 }
 
 #member {
-	width: 91%;
+	width: 450px;
 	height: 60px;
 	font-size: 20px;
 	margin-bottom: 5px;
 }
 
 #location {
-	width: 91%;
+	width: 450px;
 	height: 60px;
 	font-size: 20px;
 }

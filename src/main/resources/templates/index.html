@@ -9,10 +9,20 @@
 <body>
 	<div id="container">
 		<h1>入退室管理</h1>
-		<input type="button" value="入室" class="entryExit"/>
-		<input type="button" value="退出" class="entryExit"/><br>
-		<input type="button" value="入退出記録参照" id="record"/>
-		<input type="button" value="メンバー管理" id="member"/>
+		<div id="inline">
+			<form action="/faceCapture">
+				<input type="submit" value="入室" class="entryExit"/>
+			</form>
+			<form action="/faceCapture">
+				<input type="submit" value="退出" class="entryExit"/>
+			</form>
+		</div>
+		<form action="record">
+			<input type="submit" value="入退出記録参照" id="record"/>
+		</form>
+		<form action="/member">
+			<input type="submit" value="メンバー管理" id="member"/>
+		</form>
 		<form action="/location" >
 			<input type="submit" value="拠点管理" id="location"/>
 		</form>

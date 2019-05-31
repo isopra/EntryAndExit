@@ -1,0 +1,58 @@
+@charset "UTF-8";
+
+#container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+}
+
+h1{
+	text-align: center;
+    padding-bottom: 20px;
+}
+
+#inline {
+	display: inline-flex;
+}
+
+#return {
+	width: 100px;
+	height: 50px;
+	font-size: 20px;
+	margin-left: 50px;
+	margin-right: 40px;
+}
+
+table {
+	margin-top: 5px;
+}
+
+thead, tbody {
+	display: block;
+}
+
+tbody {
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height: 100px;
+}
+
+th {
+	padding: 5px;
+	color: white;
+	background: darkgray;
+}
+
+td {
+	padding: 5px;
+	color: black;
+	background: #f0f0f0;
+}
+
+.date {
+	width: 50px;
+}
+
+.entryExit {
+	width: 150px;
+}

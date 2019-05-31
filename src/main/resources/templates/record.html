@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>入退室管理</title>
+	<meta http-equiv="Content-Type"
+    	content="text/html; charset=UTF-8" />
+    <link href="/css/record.css" th:href="@{/css/record.css}" rel="stylesheet" >
+</head>
+<body>
+	<div id="container">
+		<h1>入退室記録　参照</h1>
+		<div id="inline">
+			<form action="/">
+				<input type="submit" value="<戻る" id="return"/>
+			</form>
+			<p>対象年月 :
+				<select name="example">
+					<option value="年月日">2019/06</option>
+				</select>
+			</p>
+		</div>
+		<table align="center">
+			<thead>
+				<tr><th class="date">日付</th><th class="entryExit">入室</th><th class="entryExit">退出</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="date"></td><td class="entryExit"></td><td class="entryExit"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
