@@ -9,11 +9,17 @@
 <body>
 	<div id="container">
 		<h1>顔写真登録</h1>
-		<form action="/member">
+		<form th:if="${check}" id="hidden">
+			<input type="submit" value="<戻る" id="return"/>
+		</form>
+		<form action="/memberEdit/0" th:unless="${check}">
 			<input type="submit" value="<戻る" id="return"/>
 		</form>
 		<div id="capture">
-			<form action="/memberEdit">
+			<form action="/member" th:if="${check}">
+				<input type="submit" value="撮影" id="photo"/>
+			</form>
+			<form action="/memberUpdate/0" th:unless="${check}">
 				<input type="submit" value="撮影" id="photo"/>
 			</form>
 		</div>

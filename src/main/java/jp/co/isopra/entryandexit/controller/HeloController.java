@@ -21,38 +21,4 @@ public class HeloController {
 		return "recordDetail";
 	}
 
-	@RequestMapping("record")
-	public String record() {
-		return "record";
-	}
-
-	@RequestMapping("/member")
-	public String member() {
-		return "member";
-	}
-
-	@RequestMapping("/memberFace")
-	public String memberFace() {
-		return "memberFace";
-	}
-
-	@RequestMapping("/memberEdit")
-	public String memberEdit() {
-		return "memberEdit";
-	}
-
-	@RequestMapping("/location")
-	public String location() {
-		return "location";
-	}
-
-	@RequestMapping("/locationNew")
-	public String locationNew() {
-		return "locationEdit";
-	}
-
-	@RequestMapping("/locationEdit")
-	public String locationEdit() {
-		return "locationEdit";
-	}
 }
