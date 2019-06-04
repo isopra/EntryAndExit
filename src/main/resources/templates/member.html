@@ -13,7 +13,7 @@
 			<form action="/">
 				<input type="submit" value="<戻る" id="return"/>
 			</form>
-			<form action="/memberFace">
+			<form action="/memberEdit/1">
 				<input type="submit" value="新規登録" id="new"/>
 			</form>
 		</div>
@@ -22,12 +22,12 @@
 				<tr><th>メンバー</th></tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><input type="radio" /></td>
+				<tr th:each="obj : ${list}">
+					<td><input type="radio" th:text="${obj.member_id} + ' ' + ${obj.name}"/></td>
 				</tr>
 			</tbody>
 		</table>
-		<form action="/memberEdit">
+		<form action="/memberEdit/0">
 			<div class="wrapper"><input type="submit" value="編集" id="edit"/></div>
 		</form>
 	</div>
