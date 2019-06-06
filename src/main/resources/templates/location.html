@@ -5,6 +5,8 @@
 	<meta http-equiv="Content-Type"
     	content="text/html; charset=UTF-8" />
     <link href="/css/location.css" th:href="@{/css/location.css}" rel="stylesheet" >
+    <script type="text/javascript">
+    </script>
 </head>
 <body>
 	<div id="container">
@@ -17,13 +19,15 @@
 				<input type="submit" value="新規登録" id="new"/>
 			</form>
 		</div>
+		<form action="/locationEdit">
 		<table align="center">
 		<tr><th>拠点</th></tr>
-			<tr th:each="obj : ${list}">
-				<td><input type="radio" th:text="${obj.name}" name="location"/></td>
+			<tr th:each="obj: ${list}">
+				<td><input type="radio" th:text="${obj.name}" name="location" th:value="${obj.location_id}" required/>
+			</td>
 			</tr>
 		</table>
-		<form action="/locationEdit">
+
 			<div class="wrapper"><input type="submit" value="編集" id="edit"/></div>
 		</form>
 	</div>

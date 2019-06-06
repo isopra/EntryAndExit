@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>入退室管理</title>
-	<meta http-equiv="Content-Type"
-    	content="text/html; charset=UTF-8" />
-    <link href="/css/locationEdit.css" th:href="@{/css/locationEdit.css}" rel="stylesheet" >
+<title>入退室管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="/css/locationEdit.css" th:href="@{/css/locationEdit.css}"
+	rel="stylesheet">
+<!--     alertの処理 -->
+<script>
+	function checkest() {
+		var text = document.forms.locationname.locationtext.value;
+		if (text == "") {
+			alert("拠点名を入力してください！");
+			return false;
+		} else if (text.length >= 100) {
+			alert("拠点名は100文字以内で入力してください");
+			return false;
+		}
+	}
+
+	function Registration() {
+		alert(text + "を登録しました");
+	}
+</script>
 </head>
 <body>
 	<div id="container">
-		<h1>拠点管理　登録・編集</h1>
-		<div id="border">
-			<p class="gap">ID : </p>
-			<div class="gap">拠点名 : <input type="text"/></div>
-		</div>
-		<div id="inline">
-			<form action="/location">
-				<input type="submit" value="キャンセル" class="size" id="cancel"/>
-			</form>
-			<form action="/location">
-				<input type="submit" value="登録" class="size" id="regist"/>
-			</form>
-		</div>
+		<h1>拠点管理 登録・編集</h1>
+		<form id="locationname" method="post"
+			onsubmit="return checkest();" th:object="${formModel}">
+			<div id="border">
+				<p class="gap" th:text="'ID : ' + ${msg}"></p>
+				<div class="gap">
+					拠点名 : <input name="name" id="locationtext" type="text" th:value="(${check} ? '' : *{name})"/>
+				</div>
+			</div>
+			<div id="registration">
+				<input type="submit" value="登録" class="size" id="regist"
+					onclick="Registration()" />
+			</div>
+		</form>
+		<form id="canccel" action="location">
+			<input type="submit" value="キャンセル" class="size" id="cancel" />
+		</form>
 	</div>
 </body>
 </html>
