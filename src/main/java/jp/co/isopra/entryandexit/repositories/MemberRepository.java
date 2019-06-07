@@ -13,7 +13,6 @@ import jp.co.isopra.entryandexit.entity.Member;
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
 	public Optional<Member> findById(int id);
-
 	@Query("SELECT d FROM Member d ORDER BY d.member_id")
 	List<Member> findAllOrderById();
 }

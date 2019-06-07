@@ -10,7 +10,8 @@
 <!-- ページ読み込みと同時にカメラ起動 -->
 <body onload="startVideo()">
 
-	<h1>入退出記録　認証</h1>
+	<h1 th:if="${mode} == 1">入出記録　認証</h1>
+	<h1 th:if="${mode} == 2">退出記録　認証</h1>
 
 	<!-- カメラ映像 -->
 	<video id="local_video" autoplay src=""></video>
@@ -19,7 +20,15 @@
 	<canvas id="canvas" class="none"></canvas>
 
 	<!-- 撮影とFaceAPI取得 -->
-	<input type="button" value="撮影" onclick="take_picture(); processImage()">
+	<form th:if="${mode} == 1" id="form_id" action="/recordDetail/1">
+	<button type="button" onclick="take_picture(); processImage()">撮影</button>
+	<input type="hidden" id="sendPersonId" name="sendPersonId">
+	</form>
+
+	<form th:if="${mode} == 2" id="form_id" action="/recordDetail/2">
+	<button type="button" onclick="take_picture(); processImage()">撮影</button>
+	<input type="hidden" id="sendPersonId" name="sendPersonId">
+	</form>
 
 	<!-- 映し出し （消す）-->
     <div id="imageDiv" style="width:420px;" class="none">
@@ -172,7 +181,10 @@
 
         .done(function(data) {
             //通信に成功したら
-            getPerson(data[0].candidates[0].personId);
+            $("#sendPersonId").val(data[0].candidates[0].personId);
+            $("#form_id").submit();
+
+            //getPerson(data[0].candidates[0].personId);
         })
 
         .fail(function(jqXHR, textStatus, errorThrown) {

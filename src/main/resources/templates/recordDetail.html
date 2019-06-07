@@ -14,16 +14,24 @@
 </head>
 <body>
 	<div id="container">
-		<h1>入退出管理　登録</h1>
+		<h1 th:if="${mode} == 1">入出管理　登録</h1>
+		<h1 th:if="${mode} == 2">退出記録　認証</h1>
 		<div id="border">
 			<p class="gap" th:text="日付：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd')}"></p>
 			<div class="gap">拠点 :
 			<select name="example">
-				<option th:each="obj: ${list}" th:text=${obj.name}></option>
+				<option th:each="obj: ${locationList}" th:text=${obj.name}></option>
 			</select>
 			</div>
-			<p class="gap">入室者 : </p>
-			<p class="gap" th:text="入室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
+			<p class="gap" th:if="${mode} == 1">入室者 :
+			<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
+			<span th:text="${obj.name}"></span></span></span></p>
+			<p th:if="${mode} == 1" class="gap" th:text="入室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
+
+			<p class="gap" th:if="${mode} == 2">退室者 :
+			<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
+			<span th:text="${obj.name}"></span></span></span></p>
+			<p th:if="${mode} == 2" class="gap" th:text="退室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
 		</div>
 		<div id="inline">
 			<form action="/">
