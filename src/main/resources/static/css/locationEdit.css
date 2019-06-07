@@ -39,4 +39,14 @@ h1{
 	height: 50px;
 	font-size: 15px;
 }
+#location{
+	float:left;
+}
 
+#registration {
+	float: right;
+}
+
+#canccel{
+	float:left;
+}
