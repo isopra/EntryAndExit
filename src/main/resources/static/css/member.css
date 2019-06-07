@@ -40,7 +40,7 @@ thead, tbody {
 tbody {
 	overflow-x: hidden;
 	overflow-y: scroll;
-	height: 100px;
+	height: 200px;
 }
 
 tr {
@@ -51,14 +51,14 @@ th {
 	padding: 5px;
 	color: white;
 	background: darkgray;
-	width: 200px;
+	width: 280px;
 }
 
 td {
 	padding: 5px;
 	color: black;
 	background: #f0f0f0;
-	width: 200px;
+	width: 280px;
 }
 
 input[type="radio"] {
