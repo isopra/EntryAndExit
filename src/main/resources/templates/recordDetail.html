@@ -5,26 +5,32 @@
 	<meta http-equiv="Content-Type"
     	content="text/html; charset=UTF-8" />
     <link href="/css/recordDetail.css" th:href="@{/css/recordDetail.css}" rel="stylesheet" >
+    <script>
+    function Registration(){
+    	alert('登録しました');
+    	location.href='/';
+    }
+    </script>
 </head>
 <body>
 	<div id="container">
 		<h1>入退出管理　登録</h1>
 		<div id="border">
-			<p class="gap">日付 : </p>
+			<p class="gap" th:text="日付：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd')}"></p>
 			<div class="gap">拠点 :
 			<select name="example">
-				<option value="東京オフィス">東京オフィス</option>
+				<option th:each="obj: ${list}" th:text=${obj.name}></option>
 			</select>
 			</div>
 			<p class="gap">入室者 : </p>
-			<p class="gap">入室時刻 : </p>
+			<p class="gap" th:text="入室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
 		</div>
 		<div id="inline">
 			<form action="/">
 				<input type="submit" value="キャンセル" id="cancel"/>
 			</form>
-			<form action="/">
-				<input type="submit" value="登録" id="regist"/>
+			<form>
+				<button type="button" id="regist" onclick="Registration()">登録</button>
 			</form>
 		</div>
 	</div>
