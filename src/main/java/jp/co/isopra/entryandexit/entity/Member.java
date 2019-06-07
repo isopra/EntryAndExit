@@ -6,8 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @Table(name="member")
@@ -19,15 +20,15 @@ public class Member {
 	private int member_id;
 
 	@Column
-	@Max(100)
+	@Length(max=100)
 	private String person_id;
 
 	@Column
 	@NotNull
-	@Max(100)
+	@Length(max=100)
 	private String name;
 
-	public int getMenber_id() {
+	public int getMember_id() {
 		return member_id;
 	}
 
