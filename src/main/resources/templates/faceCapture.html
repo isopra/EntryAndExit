@@ -9,32 +9,34 @@
 
 <!-- ページ読み込みと同時にカメラ起動 -->
 <body onload="startVideo()">
+	<div id="container">
+		<h1 th:if="${mode} == 1">入出記録　認証</h1>
+		<h1 th:if="${mode} == 2">退出記録　認証</h1>
 
-	<h1 th:if="${mode} == 1">入出記録　認証</h1>
-	<h1 th:if="${mode} == 2">退出記録　認証</h1>
+		<!-- カメラ映像 -->
+		<div class="center"><video id="local_video" autoplay src=""></video></div>
 
-	<!-- カメラ映像 -->
-	<video id="local_video" autoplay src=""></video>
+		<!-- 映し出し （消す）-->
+		<canvas id="canvas" class="none"></canvas>
 
-	<!-- 映し出し （消す）-->
-	<canvas id="canvas" class="none"></canvas>
+		<hr/>
 
-	<!-- 撮影とFaceAPI取得 -->
-	<form th:if="${mode} == 1" id="form_id" action="/recordDetail/1">
-	<button type="button" onclick="take_picture(); processImage()">撮影</button>
-	<input type="hidden" id="sendPersonId" name="sendPersonId">
-	</form>
+		<!-- 撮影とFaceAPI取得 -->
+		<form th:if="${mode} == 1" id="form_id" action="/recordDetail/1" class="center">
+			<button type="button" onclick="take_picture(); processImage()" id="button">撮影</button>
+			<input type="hidden" id="sendPersonId" name="sendPersonId">
+		</form>
 
-	<form th:if="${mode} == 2" id="form_id" action="/recordDetail/2">
-	<button type="button" onclick="take_picture(); processImage()">撮影</button>
-	<input type="hidden" id="sendPersonId" name="sendPersonId">
-	</form>
+		<form th:if="${mode} == 2" id="form_id" action="/recordDetail/2"  class="center">
+			<button type="button" onclick="take_picture(); processImage()" id="button">撮影</button>
+			<input type="hidden" id="sendPersonId" name="sendPersonId">
+		</form>
 
-	<!-- 映し出し （消す）-->
-    <div id="imageDiv" style="width:420px;" class="none">
-        <img id="sourceImage" width="400"/>
-    </div>
-
+		<!-- 映し出し （消す）-->
+    	<div id="imageDiv" style="width:420px;" class="none">
+        	<img id="sourceImage" width="400"/>
+    	</div>
+	</div>
 <script type="text/javascript">
 
 	//カメラ映像部分のid取得
