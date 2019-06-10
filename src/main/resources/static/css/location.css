@@ -15,22 +15,20 @@ h1{
 }
 
 #return {
-	width: 100px;
-	height: 50px;
-	font-size: 20px;
 	margin-left: 80px;
 	margin-right: 140px;
 }
 
-#new {
+.button {
 	width: 100px;
 	height: 50px;
 	font-size: 20px;
-	margin-right: 50px;
+	background-color: #6cf;
 }
 
 table {
 	margin-top: 5px;
+	margin-bottom:5px;
 }
 
 tr {
@@ -40,14 +38,14 @@ tr {
 th {
 	padding: 5px;
 	color: white;
-	background: darkgray;
+	background-color: #F96;
 	width: 80%;
 }
 
 td {
 	padding: 5px;
 	color: black;
-	background: #f0f0f0;
+	background-color: #FCB;
 	width: 80%;
 }
 
@@ -62,6 +60,5 @@ input[type="radio"] {
 #edit {
 	width: 100px;
 	height: 50px;
-	margin-top: 5px;
 	font-size: 20px;
 }

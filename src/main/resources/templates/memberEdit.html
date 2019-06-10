@@ -11,37 +11,41 @@
 <body>
 	<div id="container">
 		<h1>メンバー登録・編集</h1>
+
+		<!-- 新規か編集かで表示を切り替える処理 -->
 		<form th:if="${check}" class="hidden">
-			<input type="submit" value="戻る" class="return"/>
+			<input type="submit" value="戻る" class="button" id="return"/>
 		</form>
 		<form action="/member" th:unless="${check}">
-			<input type="submit" value="戻る" class="return"/>
+			<input type="submit" value="戻る" class="button" id="return"/>
 		</form>
+
 		<span th:object="${formModel}">
-		<div id="border">
-			<p class="gap">ID : <span th:if="${check}" class="gap" id="id">自動採番</span>
-								<span th:unless="${check}" class="gap" id="id" th:text="*{member_id}"></span></p>
-			<div class="gap">氏名 : <span th:if="${check}"><input type="text" class="gap" id="name"/></span>
-									<span th:unless="${check}"><input type="text" class="gap" id="name" th:value="*{name}"/></span></div>
-			<div th:if="${check}">
-				<p class="gap">名前を入力し、登録を押して下さい。</p>
+			<div id="border">
+				<p class="gap">ID : <span th:if="${check}" class="gap" id="id">自動採番</span>
+									<span th:unless="${check}" class="gap" id="id" th:text="*{member_id}"></span></p>
+				<div class="gap">氏名 : <span th:if="${check}"><input type="text" class="gap" id="name"/></span>
+										<span th:unless="${check}"><input type="text" class="gap" id="name" th:value="*{name}"/></span></div>
+				<div th:if="${check}">
+					<p class="gap">名前を入力し、登録を押して下さい。</p>
+				</div>
+				<form action="/memberRegistFace/0" th:unless="${check}">
+					<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
+					<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon"/></p>
+				</form>
 			</div>
-			<form action="/memberRegistFace/0" th:unless="${check}">
-				<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
-				<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon"/></p>
-			</form>
-		</div>
 		</span>
+
 		<form th:if="${check}" method="post" action="/memberNew/1" name="${formModel}" id="form">
 			<input type="hidden" id="person_id" name="person_id" th:value="*{person_id}"/>
 			<input type="hidden" id="person_name" name="name" th:value="*{name}"/>
-			<div class="wrapper"><button type="button" onclick="getValue('name'), getPersonId()" class="return">登録</button></div>
+			<div class="wrapper"><button type="button" onclick="getValue('name'), getPersonId()" class="button">登録</button></div>
 		</form>
 		<form th:unless="${check}" method="post" action="/memberEdit/0" th:object="${formModel}" id="form">
 			<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
 			<input type="hidden" id="editperson_id" name="person_id" th:value="*{person_id}"/>
 			<input type="hidden" id="editname" name="name" th:value="*{name}"/>
-			<div class="wrapper"><button type="button" value="登録" id="regist" onclick="editName()"></button></div>
+			<div class="wrapper"><button type="button" id="regist" onclick="editName()" class="button">登録</button></div>
 		</form>
 	</div>
 

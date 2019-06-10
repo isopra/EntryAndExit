@@ -10,18 +10,18 @@
 <body onload="startVideo()">
 	<div id="container">
 		<h1>顔写真登録</h1>
-		<span th:id="${check}">
+		<span th:id="${check}" class="none">
 			<span th:each="obj, objStat : ${list}">
 				<span th:if="${objStat.last} == true">
-					<span id="hidden"><input type="hidden" th:value="${obj.person_id}" id="person_id"/></span>
+					<span><input type="hidden" th:value="${obj.person_id}" id="person_id"/></span>
 				</span>
 			</span>
-			<input type="submit" value="戻る" class="return" id="visibility"/>
+			<input type="submit" value="戻る" class="button" id="visibility"/>
 		</span>
 		<form th:unless="${check}" th:object="${formModel}" action="/memberEdit/0">
 			<input type="hidden" name="member" th:value="*{member_id}"/>
 			<input type="hidden" th:value="*{person_id}" id="person_id"/>
-			<input type="submit" value="戻る" class="return"/>
+			<input type="submit" value="戻る" class="button"/>
 		</form>
 
 		<!-- カメラ関係 -->
@@ -31,12 +31,12 @@
 
 		<!-- FaceAPI関係 -->
 		<form th:if="${check}" action="/member" id="form">
-			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="return">撮影</button></div>
+			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="button">撮影</button></div>
 		</form>
 		<form th:unless="${check}" th:object="${formModel}" action="/memberEdit/0" id="form">
 			<input type="hidden" name="member" th:value="*{member_id}"/>
 			<input type="hidden" th:value="*{person_id}"/>
-			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="return">撮影</button></div>
+			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="button">撮影</button></div>
 		</form>
 		<span class="none">
 		<div id="wrapper" style="width:1020px; display:table;">
