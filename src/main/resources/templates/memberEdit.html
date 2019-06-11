@@ -39,7 +39,7 @@
 		<form th:if="${check}" method="post" action="/memberNew/1" name="${formModel}" id="form">
 			<input type="hidden" id="person_id" name="person_id" th:value="*{person_id}"/>
 			<input type="hidden" id="person_name" name="name" th:value="*{name}"/>
-			<div class="wrapper"><button type="button" onclick="getValue('name'), getPersonId()" class="button">登録</button></div>
+			<div class="wrapper"><button type="button" onclick="getValue('name')" class="button">登録</button></div>
 		</form>
 		<form th:unless="${check}" method="post" action="/memberEdit/0" th:object="${formModel}" id="form">
 			<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
@@ -54,6 +54,14 @@
 		var personName;
 		function getValue(idname){
 			personName = document.getElementById(idname).value;
+			console.log(personName + "さん");
+			if(personName == ""){
+				alert("氏名を入力してください");
+			}else if(personName.length > 50){
+				alert("氏名は50文字以内で入力してください");
+			}else{
+				getPersonId();
+			}
 		}
 
 		function getPersonId() {
@@ -92,10 +100,15 @@
 
 	    function editName(){
 	    	var name = document.getElementById('name').value;
+	    	if(name == ""){
+				alert("氏名を入力してください");
+	    	}else if(name.length > 50){
+				alert("氏名は50文字以内で入力してください");
+	    	}else{
+		    	$("#editname").val(name);
+		    	$("form").submit();
+	    	}
 
-	    	$("#editname").val(name);
-
-	    	$("form").submit();
 	    }
 	</script>
 </body>

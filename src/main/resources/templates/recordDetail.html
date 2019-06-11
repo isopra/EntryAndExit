@@ -5,42 +5,58 @@
 	<meta http-equiv="Content-Type"
     	content="text/html; charset=UTF-8" />
     <link href="/css/recordDetail.css" th:href="@{/css/recordDetail.css}" rel="stylesheet" >
-    <script>
-    function Registration(){
-    	alert('登録しました');
-    	location.href='/';
-    }
-    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
 	<div id="container">
 		<h1 th:if="${mode} == 1">入出管理　登録</h1>
 		<h1 th:if="${mode} == 2">退出記録　認証</h1>
-		<div id="border">
-			<p class="gap" th:text="日付：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd')}"></p>
-			<div class="gap">拠点 :
-			<select name="example">
-				<option th:each="obj: ${locationList}" th:text=${obj.name}></option>
-			</select>
-			</div>
-			<p class="gap" th:if="${mode} == 1">入室者 :
-			<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
-			<span th:text="${obj.name}"></span></span></span></p>
-			<p th:if="${mode} == 1" class="gap" th:text="入室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
+		<form id="form">
+			<div id="border">
+				<p class="gap" th:text="日付：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd')}"
+						th:value="${#dates.format(new java.util.Date(),'yyyy/MM/dd')}" name="record_date"></p>
 
-			<p class="gap" th:if="${mode} == 2">退室者 :
-			<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
-			<span th:text="${obj.name}"></span></span></span></p>
-			<p th:if="${mode} == 2" class="gap" th:text="退室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
-		</div>
-		<div id="inline">
-			<form action="/">
-				<input type="submit" value="キャンセル" id="cancel"/>
-			</form>
-			<form>
-				<button type="button" id="regist" onclick="Registration()">登録</button>
-			</form>
-		</div>
+				<div class="gap">拠点 :
+					<select name="example">
+						<option th:each="obj: ${locationList}" th:text=${obj.name} th:value="${obj.location_id}" name="location_id"></option>
+					</select>
+				</div>
+
+				<p class="gap" th:if="${mode} == 1" name="entry_member_id">入室者 :
+					<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
+					<span th:text="${obj.name}"  id="entry_member_id" th:value="${obj.member_id}"></span></span></span></p>
+				<p th:if="${mode} == 1" class="gap" th:text="入室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"
+						name="entry_time" th:value="${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
+
+				<p class="gap" th:if="${mode} == 2">退室者 :
+					<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
+					<span th:text="${obj.name}" name="exit_member_id" id="exit_member_id" th:value="${obj.member_id}"></span></span></span></p>
+				<p th:if="${mode} == 2" class="gap" th:text="退室時刻：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"
+						name="exit_time" th:value="${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm')}"></p>
+			</div>
+<!-- 			<input type="hidden" id="created_date" name="created_date"/> -->
+			<div id="right">
+				<button type="button" id="regist" onclick="Registration()" th:value="${mode}">登録</button>
+			</div>
+		</form>
+
+		<form action="/" id="left">
+			<input type="submit" value="キャンセル" id="cancel"/>
+		</form>
 	</div>
+
+	<script>
+    function Registration(){
+    	var mode = document.getElementById('regist').value;
+    	if(mode == 1){
+    		alert("登録しました");
+    		$("#form").attr('action', '/recordDetail/regist/1');
+    		$("#form").submit();
+    	}else {
+    		alert("登録しますた");
+    	}
+    }
+    </script>
+
 </body>
 </html>

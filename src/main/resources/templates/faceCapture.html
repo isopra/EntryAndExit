@@ -183,8 +183,13 @@
 
         .done(function(data) {
             //通信に成功したら
-            $("#sendPersonId").val(data[0].candidates[0].personId);
-            $("#form_id").submit();
+            if(data[0].candidates[0] == undefined){
+            	alert("顔の情報がありません");
+            	location.href = "/";
+            }else{
+            	$("#sendPersonId").val(data[0].candidates[0].personId);
+            	$("#form_id").submit();
+            }
 
             //getPerson(data[0].candidates[0].personId);
         })
