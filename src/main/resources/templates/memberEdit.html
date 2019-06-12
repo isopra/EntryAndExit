@@ -6,6 +6,7 @@
     	content="text/html; charset=UTF-8" />
     <link href="/css/memberEdit.css" th:href="@{/css/memberEdit.css}" rel="stylesheet" >
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
@@ -51,10 +52,14 @@
 
 	<script type="text/javascript">
 
+		var subscriptionKey;
 		var personName;
+
 		function getValue(idname){
+
+			subscriptionKey = getSubscriptionKey();
 			personName = document.getElementById(idname).value;
-			console.log(personName + "さん");
+
 			if(personName == ""){
 				alert("氏名を入力してください");
 			}else if(personName.length > 50){
@@ -75,7 +80,7 @@
 	            beforeSend: function(xhrObj){
 	                // Request headers
 	                xhrObj.setRequestHeader("Content-Type","application/json");
-	                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key","87d9a6a534d544e18aa0bc23ed4aa259");
+	                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
 	            },
 	            type: "POST",
 	            // Request body
@@ -99,7 +104,9 @@
 	    };
 
 	    function editName(){
+
 	    	var name = document.getElementById('name').value;
+
 	    	if(name == ""){
 				alert("氏名を入力してください");
 	    	}else if(name.length > 50){
