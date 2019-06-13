@@ -75,7 +75,7 @@ public class Record {
 		return exit_member_id;
 	}
 
-	public void setExitMember_id(int exit_member_id) {
+	public void setExit_member_id(int exit_member_id) {
 		this.exit_member_id = exit_member_id;
 	}
 
@@ -91,7 +91,7 @@ public class Record {
 		return created_time;
 	}
 
-	public void setCreate_time(Timestamp created_time) {
+	public void setCreated_time(Timestamp created_time) {
 		this.created_time = created_time;
 	}
 
