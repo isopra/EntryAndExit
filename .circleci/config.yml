@@ -31,6 +31,11 @@ jobs:
           paths:
             - ~/.m2
       - run:
+          name: set config
+          command: |
+            cat "var subscriptionKey = '${API_KEY}';" > ./src/main/resources/static/js/config.js
+            cat "function getSubscriptionKey(){return subscriptionKey;}" >> ./src/main/resources/static/js/config.js
+      - run:
           name: compile
           command: mvn compile
       - persist_to_workspace:
@@ -83,6 +88,11 @@ jobs:
             - ~/.m2
       - attach_workspace:
           at: .
+      - run:
+          name: set config
+          command: |
+            cat "var subscriptionKey = '${API_KEY}';" > ./src/main/resources/static/js/config.js
+            cat "function getSubscriptionKey(){return subscriptionKey;}" >> ./src/main/resources/static/js/config.js
       - run:
           name: package
           command: mvn package
