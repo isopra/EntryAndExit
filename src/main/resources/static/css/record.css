@@ -21,6 +21,7 @@ h1{
 	font-size: 20px;
 	margin-left: 50px;
 	margin-right: 40px;
+	background:#6cf;
 }
 
 table {
@@ -34,19 +35,19 @@ thead, tbody {
 tbody {
 	overflow-x: hidden;
 	overflow-y: scroll;
-	height: 100px;
+	height: 350px;
 }
 
 th {
 	padding: 5px;
 	color: white;
-	background: darkgray;
+	background: #f96;
 }
 
 td {
 	padding: 5px;
 	color: black;
-	background: #f0f0f0;
+	background: #fcb;
 }
 
 .date {
@@ -54,5 +55,5 @@ td {
 }
 
 .entryExit {
-	width: 150px;
+	width: 180px;
 }
