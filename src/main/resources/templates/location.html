@@ -13,22 +13,20 @@
 		<h1>拠点管理</h1>
 		<div id="inline">
 			<form action="/">
-				<input type="submit" value="<戻る" id="return"/>
+				<input type="submit" value="戻る" id="return" class="button"/>
 			</form>
 			<form action="/locationNew">
-				<input type="submit" value="新規登録" id="new"/>
+				<input type="submit" value="新規登録" class="button"/>
 			</form>
 		</div>
 		<form action="/locationEdit">
-		<table align="center">
-		<tr><th>拠点</th></tr>
-			<tr th:each="obj: ${list}">
-				<td><input type="radio" th:text="${obj.name}" name="location" th:value="${obj.location_id}" required/>
-			</td>
-			</tr>
-		</table>
-
-			<div class="wrapper"><input type="submit" value="編集" id="edit"/></div>
+			<table align="center">
+				<tr><th>拠点</th></tr>
+				<tr th:each="obj: ${list}">
+					<td><input type="radio" th:text="${obj.name}" name="location" th:value="${obj.location_id}" required/></td>
+				</tr>
+			</table>
+			<div class="wrapper"><input type="submit" value="編集" class="button"/></div>
 		</form>
 	</div>
 </body>

@@ -2,37 +2,50 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <link href="/css/faceCapture.css" th:href="@{/css/faceCapture.css}" rel="stylesheet" >
+    <script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <title>顔認証実行</title>
 </head>
 
 <!-- ページ読み込みと同時にカメラ起動 -->
 <body onload="startVideo()">
+	<div id="container">
+		<h1 th:if="${mode} == 1">入出記録　認証</h1>
+		<h1 th:if="${mode} == 2">退出記録　認証</h1>
 
-	<h1>入退出記録　認証</h1>
+		<!-- カメラ映像 -->
+		<div class="center"><video id="local_video" autoplay src=""></video></div>
 
-	<!-- カメラ映像 -->
-	<video id="local_video" autoplay src=""></video>
+		<!-- 映し出し （消す）-->
+		<canvas id="canvas" class="none"></canvas>
 
-	<!-- 映し出し （消す）-->
-	<canvas id="canvas" class="none"></canvas>
+		<hr/>
 
-	<!-- 撮影とFaceAPI取得 -->
-	<input type="button" value="撮影" onclick="take_picture(); processImage()">
+		<!-- 撮影とFaceAPI取得 -->
+		<form th:if="${mode} == 1" id="form_id" action="/recordDetail/1" class="center">
+			<button type="button" onclick="take_picture(); processImage()" id="button">撮影</button>
+			<input type="hidden" id="sendPersonId" name="sendPersonId">
+		</form>
 
-	<!-- 映し出し （消す）-->
-    <div id="imageDiv" style="width:420px;" class="none">
-        <img id="sourceImage" width="400"/>
-    </div>
+		<form th:if="${mode} == 2" id="form_id" action="/recordDetail/2"  class="center">
+			<button type="button" onclick="take_picture(); processImage()" id="button">撮影</button>
+			<input type="hidden" id="sendPersonId" name="sendPersonId">
+		</form>
 
+		<!-- 映し出し （消す）-->
+    	<div id="imageDiv" style="width:420px;" class="none">
+        	<img id="sourceImage" width="400"/>
+    	</div>
+	</div>
 <script type="text/javascript">
 
 	//カメラ映像部分のid取得
 	let localVideo = document.getElementById('local_video');
 	let localStream;
 
-
+	//APIKeyを取得
+	var subscriptionKey = getSubscriptionKey();
 
 	//PCのカメラ起動関数
 	function startVideo() {
@@ -45,8 +58,6 @@
 			return;
 		});
 	}
-
-
 
 	//写真を撮る関数
 	function take_picture() {
@@ -67,20 +78,21 @@
 	    img.src = canvas.toDataURL('image/png');
 	}
 
-
-
 	//写真を使ってFaceAPIをたたく関数
 	function processImage() {
 
 		//バイナリデータ変換
 		makeblob = function (dataURL) {
-            var BASE64_MARKER = ';base64,';
-            if (dataURL.indexOf(BASE64_MARKER) == -1) {
+
+			var BASE64_MARKER = ';base64,';
+
+			if (dataURL.indexOf(BASE64_MARKER) == -1) {
                 var parts = dataURL.split(',');
                 var contentType = parts[0].split(':')[1];
                 var raw = decodeURIComponent(parts[1]);
                 return new Blob([raw], { type: contentType });
-            }
+			}
+
             var parts = dataURL.split(BASE64_MARKER);
             var contentType = parts[0].split(':')[1];
             var raw = window.atob(parts[1]);
@@ -91,9 +103,6 @@
             }
             return new Blob([uInt8Array], { type: contentType });
 		}
-
-		//APIキー
-        var subscriptionKey = "87d9a6a534d544e18aa0bc23ed4aa259";
 
 		//エンドポイント
         var uriBase = "https://japaneast.api.cognitive.microsoft.com/face/v1.0/detect";
@@ -141,13 +150,8 @@
         })
 	}
 
-
-
 	//写真から人物検索する関数
 	function faceIdentify(faceId) {
-
-		//APIキー
-        var subscriptionKey = "87d9a6a534d544e18aa0bc23ed4aa259";
 
 		//エンドポイント
         var uriBase = "https://japaneast.api.cognitive.microsoft.com/face/v1.0/identify";
@@ -172,45 +176,15 @@
 
         .done(function(data) {
             //通信に成功したら
-            getPerson(data[0].candidates[0].personId);
-        })
+            if(data[0].candidates[0] == undefined){
+            	alert("顔の情報がありません");
+            	location.href = "/";
+            }else{
+            	$("#sendPersonId").val(data[0].candidates[0].personId);
+            	$("#form_id").submit();
+            }
 
-        .fail(function(jqXHR, textStatus, errorThrown) {
-            //通信に失敗したら
-            var errorString = (errorThrown === "") ?
-                "Error. " : errorThrown + " (" + jqXHR.status + "): ";
-            errorString += (jqXHR.responseText === "") ?
-                "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
-                    jQuery.parseJSON(jqXHR.responseText).message :
-                        jQuery.parseJSON(jqXHR.responseText).error.message;
-            alert(errorString);
-        })
-	}
-
-	//人物特定関数
-	function getPerson(personId) {
-
-		//APIキー
-        var subscriptionKey = "87d9a6a534d544e18aa0bc23ed4aa259";
-
-      //エンドポイント
-        var uriBase = "https://japaneast.api.cognitive.microsoft.com/face/v1.0/persongroups/sample/persons/" + personId;
-
-      //REST APIとの通信
-        $.ajax({
-            url: uriBase,
-
-            //リクエストヘッダ
-            beforeSend: function(xhrObj){
-                xhrObj.setRequestHeader("Content-Type","application/json");
-                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
-            },
-            type: "GET",
-        })
-
-        .done(function(data) {
-            //通信に成功したら
-            console.log(data.name);
+            //getPerson(data[0].candidates[0].personId);
         })
 
         .fail(function(jqXHR, textStatus, errorThrown) {

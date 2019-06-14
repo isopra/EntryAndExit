@@ -6,32 +6,117 @@
     	content="text/html; charset=UTF-8" />
     <link href="/css/memberEdit.css" th:href="@{/css/memberEdit.css}" rel="stylesheet" >
     <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
 	<div id="container">
 		<h1>メンバー登録・編集</h1>
+
+		<!-- 新規か編集かで表示を切り替える処理 -->
 		<form th:if="${check}" class="hidden">
-			<input type="submit" value="戻る" id="return"/>
+			<input type="submit" value="戻る" class="button" id="return"/>
 		</form>
 		<form action="/member" th:unless="${check}">
-			<input type="submit" value="<戻る" id="return"/>
+			<input type="submit" value="戻る" class="button" id="return"/>
 		</form>
-		<div id="border">
-			<p class="gap">ID : </p>
-			<div class="gap">氏名 : <input type="text"/></div>
-			<form th:if="${check}" class="hidden">
-				<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon"/></p>
-			</form>
-			<form action="/memberFace/0" th:unless="${check}">
-				<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon"/></p>
-			</form>
-		</div>
-		<form th:if="${check}" action="/memberFace/1">
-			<div class="wrapper"><input type="submit" value="撮影" id="regist"/></div>
+
+		<span th:object="${formModel}">
+			<div id="border">
+				<p class="gap">ID : <span th:if="${check}" class="gap" id="id">自動採番</span>
+									<span th:unless="${check}" class="gap" id="id" th:text="*{member_id}"></span></p>
+				<div class="gap">氏名 : <span th:if="${check}"><input type="text" class="gap" id="name"/></span>
+										<span th:unless="${check}"><input type="text" class="gap" id="name" th:value="*{name}"/></span></div>
+				<div th:if="${check}">
+					<p class="gap">名前を入力し、登録を押して下さい。</p>
+				</div>
+				<form action="/memberRegistFace/0" th:unless="${check}">
+					<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
+					<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon"/></p>
+				</form>
+			</div>
+		</span>
+
+		<form th:if="${check}" method="post" action="/memberNew/1" name="${formModel}" id="form">
+			<input type="hidden" id="person_id" name="person_id" th:value="*{person_id}"/>
+			<input type="hidden" id="person_name" name="name" th:value="*{name}"/>
+			<div class="wrapper"><button type="button" onclick="getValue('name')" class="button">登録</button></div>
 		</form>
-		<form th:unless="${check}" action="/member">
-			<div class="wrapper"><input type="submit" value="登録" id="regist"/></div>
+		<form th:unless="${check}" method="post" action="/memberEdit/0" th:object="${formModel}" id="form">
+			<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
+			<input type="hidden" id="editperson_id" name="person_id" th:value="*{person_id}"/>
+			<input type="hidden" id="editname" name="name" th:value="*{name}"/>
+			<div class="wrapper"><button type="button" id="regist" onclick="editName()" class="button">登録</button></div>
 		</form>
 	</div>
+
+	<script type="text/javascript">
+
+		var subscriptionKey;
+		var personName;
+
+		function getValue(idname){
+
+			subscriptionKey = getSubscriptionKey();
+			personName = document.getElementById(idname).value;
+
+			if(personName == ""){
+				alert("氏名を入力してください");
+			}else if(personName.length > 50){
+				alert("氏名は50文字以内で入力してください");
+			}else{
+				getPersonId();
+			}
+		}
+
+		function getPersonId() {
+	        var params = {
+	            // Request parameters
+	            "returnPersonGroupId":"true"
+	        };
+
+	        $.ajax({
+	            url: "https://japaneast.api.cognitive.microsoft.com/face/v1.0/persongroups/sample/persons?" + $.param(params),
+	            beforeSend: function(xhrObj){
+	                // Request headers
+	                xhrObj.setRequestHeader("Content-Type","application/json");
+	                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+	            },
+	            type: "POST",
+	            // Request body
+	            data: '{"name": ' + '"' + personName + '"}',
+	            processData: false
+	        })
+	        //通信に成功したとき
+	        .done(function(data) {
+	        	//$("#responseTextArea").val(JSON.stringify(data, null, 2));
+	        	$("#person_id").val(data.personId);
+	        	$('#person_name').val(personName);
+
+				$("#form").submit();
+
+	        })
+	        //失敗したとき
+	        .fail(function() {
+	            alert("error");
+	        });
+
+	    };
+
+	    function editName(){
+
+	    	var name = document.getElementById('name').value;
+
+	    	if(name == ""){
+				alert("氏名を入力してください");
+	    	}else if(name.length > 50){
+				alert("氏名は50文字以内で入力してください");
+	    	}else{
+		    	$("#editname").val(name);
+		    	$("form").submit();
+	    	}
+
+	    }
+	</script>
 </body>
 </html>

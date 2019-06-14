@@ -5,24 +5,188 @@
 	<meta http-equiv="Content-Type"
     	content="text/html; charset=UTF-8" />
     <link href="/css/memberFace.css" th:href="@{/css/memberFace.css}" rel="stylesheet" >
+    <script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
-<body>
+<body onload="startVideo()">
 	<div id="container">
 		<h1>顔写真登録</h1>
-		<form th:if="${check}" id="hidden">
-			<input type="submit" value="<戻る" id="return"/>
+		<span th:id="${check}" class="none">
+			<span th:each="obj, objStat : ${list}">
+				<span th:if="${objStat.last} == true">
+					<span><input type="hidden" th:value="${obj.person_id}" id="person_id"/></span>
+				</span>
+			</span>
+			<input type="submit" value="戻る" class="button" id="visibility"/>
+		</span>
+		<form th:unless="${check}" th:object="${formModel}" action="/memberEdit/0">
+			<input type="hidden" name="member" th:value="*{member_id}"/>
+			<input type="hidden" th:value="*{person_id}" id="person_id"/>
+			<input type="submit" value="戻る" class="button"/>
 		</form>
-		<form action="/memberEdit/0" th:unless="${check}">
-			<input type="submit" value="<戻る" id="return"/>
+
+		<!-- カメラ関係 -->
+		<div class="center"><video id="local_video" autoplay src=""></video></div>
+		<canvas id="canvas" class="none"></canvas>
+		<hr/>
+
+		<!-- FaceAPI関係 -->
+		<form th:if="${check}" action="/member" id="form">
+			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="button">撮影</button></div>
 		</form>
-		<div id="capture">
-			<form action="/member" th:if="${check}">
-				<input type="submit" value="撮影" id="photo"/>
-			</form>
-			<form action="/memberUpdate/0" th:unless="${check}">
-				<input type="submit" value="撮影" id="photo"/>
-			</form>
+		<form th:unless="${check}" th:object="${formModel}" action="/memberEdit/0" id="form">
+			<input type="hidden" name="member" th:value="*{member_id}"/>
+			<input type="hidden" th:value="*{person_id}"/>
+			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="button">撮影</button></div>
+		</form>
+		<span class="none">
+		<div id="wrapper" style="width:1020px; display:table;">
+    		<div id="jsonOutput" style="width:600px; display:table-cell;">
+        	Response:<br><br>
+        	<textarea id="responseTextArea" class="UIInput"
+            	style="width:580px; height:400px;"></textarea>
+    		</div>
+    		<div id="imageDiv" style="width:420px; display:table-cell;">
+        		Source image:<br><br>
+       	 		<img id="sourceImage" width="400" />
+    		</div>
 		</div>
+		</span>
 	</div>
+
+	<script type="text/javascript">
+
+	let localVideo = document.getElementById('local_video');
+	let localStream;
+
+	var person_id = document.getElementById('person_id').value;
+
+	// start local video
+	function startVideo() {
+	  navigator.mediaDevices.getUserMedia({video: true, audio: false})
+	  .then(function (stream) { // success
+	    localStream = stream;
+	    localVideo.srcObject = localStream;
+	  }).catch(function (error) { // error
+	    console.error('mediaDevice.getUserMedia() error:', error);
+	    return;
+	  });
+	}
+
+	function take_picture() {
+	    //videoのstreamをcanvasに書き出す方法
+	    var canvas = document.getElementById('canvas');
+	    var ctx = canvas.getContext('2d');
+
+	    //videoの縦幅横幅を取得
+	    var w = localVideo.offsetWidth;
+	    var h = localVideo.offsetHeight;
+	    canvas.setAttribute("width", w);
+	    canvas.setAttribute("height", h);
+	    ctx.drawImage(localVideo, 0, 0, w, h);
+
+	    //canvasを更にimgに書き出す方法
+	    var img = document.getElementById('sourceImage');
+	    img.src = canvas.toDataURL('image/png');
+	}
+
+	    function processImage() {
+
+	    	makeblob = function (dataURL) {
+
+	    		var BASE64_MARKER = ';base64,';
+
+	    		if (dataURL.indexOf(BASE64_MARKER) == -1) {
+	                var parts = dataURL.split(',');
+	                var contentType = parts[0].split(':')[1];
+	                var raw = decodeURIComponent(parts[1]);
+	                return new Blob([raw], { type: contentType });
+	    		}
+
+	    		var parts = dataURL.split(BASE64_MARKER);
+	            var contentType = parts[0].split(':')[1];
+	            var raw = window.atob(parts[1]);
+	            var rawLength = raw.length;
+	            var uInt8Array = new Uint8Array(rawLength);
+
+	            for (var i = 0; i < rawLength; ++i) {
+	                uInt8Array[i] = raw.charCodeAt(i);
+
+	            }
+
+	            return new Blob([uInt8Array], { type: contentType });
+	        }
+
+	        var subscriptionKey = getSubscriptionKey();
+	        var uriBase = "https://japaneast.api.cognitive.microsoft.com/face/v1.0/persongroups/sample/persons/" + person_id + "/persistedFaces";
+
+	        // Display the image.
+	        var sourceImageUrl = document.querySelector("#sourceImage").src;
+
+	        // Perform the REST API call.
+	        $.ajax({
+	            url: uriBase ,
+
+	            // Request headers.
+	            beforeSend: function(xhrObj){
+	                xhrObj.setRequestHeader("Content-Type","application/octet-stream");
+	                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+	            },
+
+	            type: "POST",
+				processData: false,
+	            // Request body.
+	            data: makeblob(sourceImageUrl)
+	        })
+
+	        .done(function(data) {
+	            // Show formatted JSON on webpage.
+	            $("#responseTextArea").val(data.persistedFaceId);
+
+				trainGroup(subscriptionKey);
+	        })
+
+	        .fail(function(jqXHR, textStatus, errorThrown) {
+	            // Display error message.
+	            var errorString = (errorThrown === "") ?
+	                "Error. " : errorThrown + " (" + jqXHR.status + "): ";
+	            errorString += (jqXHR.responseText === "") ?
+	                "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
+	                    jQuery.parseJSON(jqXHR.responseText).message :
+	                        jQuery.parseJSON(jqXHR.responseText).error.message;
+	            alert(errorString);
+	        });
+	    };
+
+	    function trainGroup(subscriptionKey){
+
+	    	var uri = "https://japaneast.api.cognitive.microsoft.com/face/v1.0/persongroups/sample/train";
+
+	    	$.ajax({
+	    		url: uri,
+
+	    		beforeSend: function(xhrObj){
+	    			xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+	    		},
+
+	    		type: "POST",
+
+	    	}).done(function(){
+	    		alert("登録に成功しました。");
+
+	    		$("#form").submit();
+	    	}).fail(function(jqXHR, textStatus, errorThrown) {
+	            // Display error message.
+	            var errorString = (errorThrown === "") ?
+	                "Error. " : errorThrown + " (" + jqXHR.status + "): ";
+	            errorString += (jqXHR.responseText === "") ?
+	                "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
+	                    jQuery.parseJSON(jqXHR.responseText).message :
+	                        jQuery.parseJSON(jqXHR.responseText).error.message;
+	            alert(errorString);
+	        });
+
+	    };
+	</script>
 </body>
 </html>
