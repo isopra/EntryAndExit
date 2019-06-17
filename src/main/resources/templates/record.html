@@ -14,6 +14,13 @@
 				<input type="submit" value="戻る" id="return" />
 			</form>
 			<p>
+				対象拠点 : <select  name="location" id="location"
+					onchange="selectchange();">
+					<option th:each="obj: ${locationT}" th:value="${obj.name}" th:text="${obj.name}" th:id="${obj.location_id}">
+					</option>
+				</select>
+			</p>
+			<p>
 				対象年月 : <select name="example" id="year_month"
 					onchange="selectchange();">
 				</select>
@@ -98,6 +105,15 @@
 	};
 
 	function selectchange() {
+		var element = document.getElementById("location");
+		var elements = element.options;
+		var selects = "";
+		for ( var i=0,l=elements.length; l>i; i++ ) {
+			if ( elements[i].selected ) {
+				selects = elements[i].id;
+			}
+		}
+		console.log(select);
 		var select = document.getElementById("year_month");
 		var ym = select.value;
 		var first = ym.substr(0, 4);
@@ -110,22 +126,15 @@
 		console.log(RT);
 		console.log(MT);
 		document.getElementById("tbody").innerHTML = "";
-		var week =[
-			{"in":RT[0]['entry_time'],"out":RT[0]['exit_time'],"name":"kosaka"},
-			{"outout":"kutu"},
-			];
-		var week2 =[
-			{"in":RT[0]['entry_time'],"out":RT[0]['exit_time'],"name":"kosaka"},
-			{"inin":"panda"},
-			];
-		var highRow = {};
 
 
 		for (i = 1; i <= sue; i++) {
-			var highRow2 ={};
-			console.log(highRow2);
+			var highRow ={};
+			console.log(highRow);
 			var en_T = "";
 			var ex_T = "";
+			var en_N = "";
+			var ex_N = "";
 			fday = i + '(' + getweek(ym + '/' + i) + ')';
 			if(i<10){
 				checkday = first+'-'+secound+"-"+"0"+i;
@@ -133,21 +142,30 @@
 				checkday = first+'-'+secound+"-"+i;
 			}
 			for(k = 0;k < RT.length; k++){
-				if(RT[k].record_date == checkday && !(RT[k].entry_time==null)){
+				if(RT[k].record_date.toString().substr(0,10) == checkday && RT[k].location_id == selects){
 					en_T = RT[k].entry_time.toString().substr(11,5);
-				}
-				if(RT[k].record_date == checkday && !(RT[k].exit_time==null)){
+					if(!RT[k].exit_time == null)
 					ex_T = RT[k].exit_time.toString().substr(11,5);
+					for(m = 0; m < MT.length; m++){
+						if(RT[k].entry_member_id == MT[m].member_id){
+							en_N = MT[m].name;
+						}
+						if(RT[k].exit_member_id == MT[m].member_id){
+							ex_N = MT[m].name;
+						}
+					}
 				}
 			}
-			highRow2['Entry'] = en_T;
-			highRow2['Exit'] = ex_T;
-			console.log(highRow2);
+			highRow['Entry'] = en_T;
+			highRow['Exit'] = ex_T;
+			highRow['EntryName'] = en_N;
+			highRow['ExitName'] = ex_N;
+			console.log(highRow);
 		    var div_element = document.createElement("tr");
 		    console.log(div_element);
 		    div_element.innerHTML = '<td id="day" class="date">'+ fday +'</td>'
-		    +'<td id="entry" class="entryExit">'+ highRow2['Entry'] +'</td>'
-		    +'<td id="exit" class="entryExit">'+ highRow2['Exit'] +'</td>';
+		    +'<td id="entry" class="entryExit">'+ highRow['Entry'] + " " + highRow['EntryName']+'</td>'
+		    +'<td id="exit" class="entryExit">'+ highRow['Exit'] + " " + highRow['ExitName']+'</td>';
 		    var parent_object = document.getElementById("tbody");
 		    parent_object.appendChild(div_element);
 
