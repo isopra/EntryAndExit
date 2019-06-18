@@ -12,7 +12,7 @@
 	<div id="container">
 	<h1 th:if="${mode} == 1">入室記録</h1>
 	<h1 th:if="${mode} == 2">退室記録</h1>
-		<form id="form" action="/recordDetail/regist/1" th:object="${formModel}">
+		<form id="form" action="" th:object="${formModel}">
 			<div id="border">
 
 				<p class="gap" th:text="日付：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd')}"></p>
@@ -33,13 +33,18 @@
 			    <input th:if="${mode} == 1" name="entry_time" id="entry_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" type="hidden">
 
 			<!-- 退室時 -->
+			<span th:if="${mode} == 2" th:each="obj, objStat : ${recordList}">
+				<span th:if="${objStat.last} == true">
+					<input type="hidden" th:value="${obj.entry_member_id}" id="entry_member_id" name="entry_member_id"/>
+					<input type="hidden" th:value="${obj.entry_time}" id="entry_time" name="entry_time"/>
+				</span>
+				</span>
 				<p class="gap" th:if="${mode} == 2">退室者：
 				<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
 				<input name="exit_member_id" th:text="${obj.name}" id="exit_member_id" th:value="${obj.member_id}" type="hidden" >
 				</span></span></p>
 				<p class="gap" th:text="退室時刻： + ${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" th:if="${mode} == 2"></p>
 			    <input th:if="${mode} == 2" name="exit_time" id="exit_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" type="hidden">
-
 
 			</div>
 
@@ -56,15 +61,17 @@
 		</form>
 	</div>
 
-	<script>
+	<script th:inline="javascript">
     function Registration(){
     	var mode = document.getElementById('regist').value;
     	if(mode == 1){
     		console.log(document.getElementById('entry_time').value);
     		alert("入室時間を記録しました。");
+    		$('form').attr('action',"/recordDetail/regist/1");
     		$("#form").submit();
     	}else if(mode == 2) {
     		alert("退室時間を記録しました。");
+    		$('form').attr('action',"/recordDetail/regist/2");
     		$("#form").submit();
     	}else {
     		alert("error: 入退室時間を記録できませんでした。");

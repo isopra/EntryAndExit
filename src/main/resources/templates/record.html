@@ -144,7 +144,7 @@
 			for(k = 0;k < RT.length; k++){
 				if(RT[k].record_date.toString().substr(0,10) == checkday && RT[k].location_id == selects){
 					en_T = RT[k].entry_time.toString().substr(11,5);
-					if(!RT[k].exit_time == null)
+					if(!(RT[k].exit_time == null))
 					ex_T = RT[k].exit_time.toString().substr(11,5);
 					for(m = 0; m < MT.length; m++){
 						if(RT[k].entry_member_id == MT[m].member_id){
