@@ -30,6 +30,7 @@
 			onsubmit="return checkest();" th:object="${formModel}">
 			<div id="border">
 				<p class="gap" th:text="'ID : ' + ${msg}"></p>
+				<input type="hidden" th:value="${msg}" name="location_id"/>
 				<div class="gap">
 					拠点名 : <input name="name" id="locationtext" type="text" th:value="(${check} ? '' : *{name})"/>
 				</div>
