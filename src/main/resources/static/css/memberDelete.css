@@ -1,0 +1,42 @@
+@charset "UTF-8";
+
+#container {
+	margin-left: auto;
+	margin-right: auto;
+	width: 500px;
+}
+
+h1{
+	text-align: center;
+    padding-bottom: 20px;
+}
+
+#border {
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 5px;
+	margin-top: 5px;
+	border: solid 2px black;
+	width: 300px;
+	height: 150px;
+}
+
+.gap{
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+.wrapper {
+	text-align:center;
+}
+
+.button {
+	width: 100px;
+	height: 50px;
+	font-size: 20px;
+	background-color: #6cf;
+}
+
+#inline{
+	display: inline-flex;
+}

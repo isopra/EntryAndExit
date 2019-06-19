@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link href="/css/memberDelete.css" th:href="@{/css/memberDelete.css}" rel="stylesheet" >
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
+
+<title>メンバー　削除</title>
+
+</head>
+
+<body>
+
+	<div id="container">
+
+		<h1>メンバー削除</h1>
+
+		<div id=inline>
+			<form action="/member">
+				<input type="submit" value="戻る" class="button" id="return"/>
+			</form>
+		</div>
+
+		<div id=border>
+			<form action="/memberDelete" method="post" th:object="${formModel}" id="form-id">
+				<span th:object="${formModel}">
+					<p class="gap">ID : <span class="gap" id="id" th:text="*{member_id}"></span></p>
+					<p class="gap">氏名 : <span class="gap" id="name" th:text="*{name}"></span></p>
+					<input type="hidden" name="member_id" th:value="*{member_id}">
+					<input type="hidden" id="personId" th:value="*{person_id}">
+				</span>
+
+				<div class="wrapper">
+					<button type="button" onclick="deleteMember()" class="button">削除</button>
+				</div>
+			</form>
+		</div>
+
+	</div>
+
+	<script>
+		var subscriptionKey = getSubscriptionKey();
+		var person_id = document.getElementById('personId').value;
+
+		function deleteMember() {
+			var uriBase = "https://japaneast.api.cognitive.microsoft.com/face/v1.0/persongroups/sample/persons/" + person_id;
+
+	        $.ajax({
+	            url: uriBase ,
+	            beforeSend: function(xhrObj){
+	                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
+	            },
+	            type: "DELETE",
+	        })
+
+	        .done(function(data) {
+	        	$('#form-id').submit();
+	        })
+
+	        .fail(function(jqXHR, textStatus, errorThrown) {
+	            // Display error message.
+	            var errorString = (errorThrown === "") ?
+	                "Error. " : errorThrown + " (" + jqXHR.status + "): ";
+	            errorString += (jqXHR.responseText === "") ?
+	                "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
+	                    jQuery.parseJSON(jqXHR.responseText).message :
+	                        jQuery.parseJSON(jqXHR.responseText).error.message;
+	            alert(errorString);
+	        })
+		}
+	</script>
+
+</body>
+
+</html>
