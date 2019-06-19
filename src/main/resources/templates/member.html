@@ -5,10 +5,13 @@
 	<meta http-equiv="Content-Type"
     	content="text/html; charset=UTF-8" />
     <link href="/css/member.css" th:href="@{/css/member.css}" rel="stylesheet" >
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
+
 	<div id="container">
 		<h1>メンバー一覧</h1>
+
 		<div id="inline">
 			<form action="/">
 				<input type="submit" value="戻る" id="return" class="button"/>
@@ -17,19 +20,33 @@
 				<input type="submit" value="新規登録" class="button"/>
 			</form>
 		</div>
-		<form action="/memberEdit/0">
+
+		<form id="form-id">
 			<table align="center">
 				<thead>
 					<tr><th>メンバー</th></tr>
 				</thead>
 				<tbody>
 					<tr th:each="obj : ${list}">
-						<td><input type="radio" th:text="${obj.member_id} + '&emsp;' + ${obj.name}" name="member" th:value="${obj.member_id}" required/></td>
+						<td><input id="member" type="radio" th:text="${obj.member_id} + ' ' + ${obj.name}"
+						name="member" th:value="${obj.member_id}" required/></td>
 					</tr>
 				</tbody>
 			</table>
-			<div class="wrapper"><input type="submit" value="編集" class="button"/></div>
+				<div class="wrapper">
+					<button class="button" type="submit" onclick="submitAction('/memberEdit/0')" name="submitButton">編集</button>
+					<button class="button" type="submit" onclick="submitAction('/memberDelete')" name="submitButton">削除</button>
+				</div>
 		</form>
 	</div>
+
+	<script>
+		function submitAction(url) {
+			$('#form-id').attr('action', url);
+			$("button[name=submitButton]").click();
+			//$('#form-id').submit();
+		}
+	</script>
+
 </body>
 </html>

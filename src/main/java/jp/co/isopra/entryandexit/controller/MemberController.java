@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -75,12 +76,12 @@ public class MemberController {
 			@RequestParam(value="member") int id,
 			@PathVariable int hidden,
 			ModelAndView mav) {
-		mav.setViewName("memberEdit");
-		mav.addObject("hidden", hidden);
-		mav.addObject("check", hidden == 1);
-		Optional<Member> data = repository.findById(id);
-		mav.addObject("formModel", data.get());
-		return mav;
+			mav.setViewName("memberEdit");
+			mav.addObject("hidden", hidden);
+			mav.addObject("check", hidden == 1);
+			Optional<Member> data = repository.findById(id);
+			mav.addObject("formModel", data.get());
+			return mav;
 	}
 
 	@RequestMapping(value="/memberEdit/{hidden}", method=RequestMethod.POST)
@@ -128,6 +129,26 @@ public class MemberController {
 		Optional<Member> data = repository.findById(id);
 		mav.addObject("formModel", data.get());
 		return mav;
+	}
+
+	@RequestMapping(value="/memberDelete", method=RequestMethod.GET)
+	public ModelAndView memberDeleteAPI(
+			@RequestParam(value="member") int id,
+			ModelAndView mav) {
+			mav.setViewName("memberDelete");
+			Optional<Member> data = repository.findById(id);
+			mav.addObject("formModel", data.get());
+			return mav;
+	}
+
+	@RequestMapping(value="/memberDelete", method=RequestMethod.POST)
+	@Transactional(readOnly = false)
+	public ModelAndView memberDeleteDB(
+			@RequestParam(value="member_id") Member member_id,
+			ModelAndView mav) {
+		mav.setViewName("member");
+		repository.delete(member_id);
+		return new ModelAndView("redirect:/member");
 	}
 
 }

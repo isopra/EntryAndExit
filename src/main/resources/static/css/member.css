@@ -9,8 +9,7 @@ h1{
 	margin-right: auto;
 	width: 500px;
 }
-
-#inline {
+#inline{
 	display: inline-flex;
 }
 
