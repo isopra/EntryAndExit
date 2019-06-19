@@ -1,34 +1,179 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>入退室管理</title>
-	<meta http-equiv="Content-Type"
-    	content="text/html; charset=UTF-8" />
-    <link href="/css/record.css" th:href="@{/css/record.css}" rel="stylesheet" >
+<title>入退室管理</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link href="/css/record.css" th:href="@{/css/record.css}"
+	rel="stylesheet">
 </head>
-<body>
+<body onload="selectchange()">
 	<div id="container">
-		<h1>入退室記録　参照</h1>
+		<h1>入退室記録 参照</h1>
 		<div id="inline">
 			<form action="/">
-				<input type="submit" value="<戻る" id="return"/>
+				<input type="submit" value="戻る" id="return" />
 			</form>
-			<p>対象年月 :
-				<select name="example">
-					<option value="年月日">2019/06</option>
+			<p>
+				対象拠点 : <select  name="location" id="location"
+					onchange="selectchange();">
+					<option th:each="obj: ${locationT}" th:value="${obj.name}" th:text="${obj.name}" th:id="${obj.location_id}">
+					</option>
+				</select>
+			</p>
+			<p>
+				対象年月 : <select name="example" id="year_month"
+					onchange="selectchange();">
 				</select>
 			</p>
 		</div>
 		<table align="center">
-			<thead>
-				<tr><th class="date">日付</th><th class="entryExit">入室</th><th class="entryExit">退出</th></tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="date"></td><td class="entryExit"></td><td class="entryExit"></td>
-				</tr>
+				<thead>
+					<tr>
+						<th class="date">日付</th>
+						<th class="entryExit">入室</th>
+						<th class="entryExit">退出</th>
+					</tr>
+				</thead>
+			<tbody id="tbody">
+<!-- 				<tr> -->
+<!-- 					<td id="day" class="date"></td> -->
+<!-- 					<td id="entry" class="entryExit"></td> -->
+<!-- 					<td id="exit" class="entryExit"></td> -->
+<!-- 				</tr> -->
 			</tbody>
 		</table>
 	</div>
 </body>
+<script th:inline="javascript">
+	(function() {
+		'use strict';
+		var optionYMCreate, this_month, this_year, today, this_ym;
+		today = new Date();
+		this_year = today.getFullYear();
+		this_month = today.getMonth() + 1;
+		if (this_month < 10) {
+			this_ym = this_year + '/' + "0" + this_month; //今月
+		} else {
+			this_ym = this_year + '/' + this_month; //今月
+		}
+
+		var ycheck;
+
+		//年月ｵﾌﾟｼｮﾝを作る
+		optionYMCreate = function(ystart, yend, id) { //年の範囲と対象のコントロールIDを受け取る
+			var i, opt, m_i, ym;
+			opt = null;
+			for (i = ystart; i <= yend; i++) { //年のループ
+				if (i === ystart) {
+					ycheck = this_month;
+				} else {
+					ycheck = 1;
+				}
+				for (m_i = ycheck; m_i <= 12; m_i++) { //月のループ
+					if (m_i < 10) {
+						ym = i + '/' + 0 + m_i; //ループ内の年月
+					} else {
+						ym = i + '/' + m_i; //ループ内の年月
+					}
+					if (ym === this_ym) { //今年月と一致してたら選択済みとする
+						opt += "<option value='" + ym + "'selected>" + ym
+								+ "</option>";
+						break;
+					}
+					opt += "<option value='" + ym + "'>" + ym + "</option>";
+
+				}
+
+			}
+			return document.getElementById(id).innerHTML = opt;
+		};
+
+		optionYMCreate(this_year - 1, this_year, 'year_month');
+	})();
+
+	var getMonthDays = function(year, month) {
+		return new Date(year, month, 0).getDate();
+	};
+
+	var getweek = function(week) {
+		var WeekChars = [ "日", "月", "火", "水", "木", "金", "土" ];
+
+		// 日付オブジェクトから曜日を得る
+		var dObj = new Date(week);
+		var wDay = dObj.getDay();
+		return WeekChars[wDay];
+	};
+
+	function selectchange() {
+		var element = document.getElementById("location");
+		var elements = element.options;
+		var selects = "";
+		for ( var i=0,l=elements.length; l>i; i++ ) {
+			if ( elements[i].selected ) {
+				selects = elements[i].id;
+			}
+		}
+		console.log(select);
+		var select = document.getElementById("year_month");
+		var ym = select.value;
+		var first = ym.substr(0, 4);
+		var secound = ym.substr(5, 2);
+		var fday = "";
+		var checkday = "";
+		var sue = getMonthDays(first, secound);
+		var RT = [[${recordT}]];
+		var MT = [[${memberT}]];
+		console.log(RT);
+		console.log(MT);
+		document.getElementById("tbody").innerHTML = "";
+
+
+		for (i = 1; i <= sue; i++) {
+			var highRow ={};
+			console.log(highRow);
+			var en_T = "";
+			var ex_T = "";
+			var en_N = "";
+			var ex_N = "";
+			fday = i + '(' + getweek(ym + '/' + i) + ')';
+			if(i<10){
+				checkday = first+'-'+secound+"-"+"0"+i;
+			}else{
+				checkday = first+'-'+secound+"-"+i;
+			}
+			for(k = 0;k < RT.length; k++){
+				if(RT[k].record_date.toString().substr(0,10) == checkday && RT[k].location_id == selects){
+					en_T = RT[k].entry_time.toString().substr(11,5);
+					if(!(RT[k].exit_time == null))
+					ex_T = RT[k].exit_time.toString().substr(11,5);
+					for(m = 0; m < MT.length; m++){
+						if(RT[k].entry_member_id == MT[m].member_id){
+							en_N = MT[m].name;
+						}
+						if(RT[k].exit_member_id == MT[m].member_id){
+							ex_N = MT[m].name;
+						}
+					}
+				}
+			}
+			highRow['Entry'] = en_T;
+			highRow['Exit'] = ex_T;
+			highRow['EntryName'] = en_N;
+			highRow['ExitName'] = ex_N;
+			console.log(highRow);
+		    var div_element = document.createElement("tr");
+		    console.log(div_element);
+		    div_element.innerHTML = '<td id="day" class="date">'+ fday +'</td>'
+		    +'<td id="entry" class="entryExit">'+ highRow['Entry'] + " " + highRow['EntryName']+'</td>'
+		    +'<td id="exit" class="entryExit">'+ highRow['Exit'] + " " + highRow['ExitName']+'</td>';
+		    var parent_object = document.getElementById("tbody");
+		    parent_object.appendChild(div_element);
+
+			//document.getElementById("tbody").appendChild('<tr><td id="day" value="'+ fday +'" class="date"></td><td id="entry" class="entryExit"></td><td id="exit" class="entryExit"></td></tr>')
+		}
+// 		document.getElementById("day").innerHTML = fday;
+// 		document.getElementById("entry").innerHTML = fday;
+// 		document.getElementById("exit").innerHTML = fday;
+	}
+</script>
 </html>
