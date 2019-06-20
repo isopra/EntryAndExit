@@ -5,6 +5,7 @@
 	<meta http-equiv="Content-Type"
     	content="text/html; charset=UTF-8" />
     <link href="/css/memberFace.css" th:href="@{/css/memberFace.css}" rel="stylesheet" >
+    <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
@@ -17,12 +18,12 @@
 					<span><input type="hidden" th:value="${obj.person_id}" id="person_id"/></span>
 				</span>
 			</span>
-			<input type="submit" value="戻る" class="button" id="visibility"/>
+			<input type="submit" value="&#xf060" class="fas" id="visibility" ontouchstart=""/>
 		</span>
 		<form th:unless="${check}" th:object="${formModel}" action="/memberEdit/0">
 			<input type="hidden" name="member" th:value="*{member_id}"/>
 			<input type="hidden" th:value="*{person_id}" id="person_id"/>
-			<input type="submit" value="戻る" class="button"/>
+			<input type="submit" value="&#xf060" class="fas" id="icon" ontouchstart=""/>
 		</form>
 
 		<!-- カメラ関係 -->
@@ -32,25 +33,18 @@
 
 		<!-- FaceAPI関係 -->
 		<form th:if="${check}" action="/member" id="form">
-			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="button">撮影</button></div>
+			<div class="center"><button type="button" onclick="take_picture(), processImage()" id="button" ontouchstart="">撮影</button></div>
 		</form>
 		<form th:unless="${check}" th:object="${formModel}" action="/memberEdit/0" id="form">
 			<input type="hidden" name="member" th:value="*{member_id}"/>
 			<input type="hidden" th:value="*{person_id}"/>
-			<div class="center"><button type="button" onclick="take_picture(), processImage()" class="button">撮影</button></div>
+			<div class="center"><button type="button" onclick="take_picture(), processImage()" id="button" ontouchstart="">撮影</button></div>
 		</form>
 		<span class="none">
-		<div id="wrapper" style="width:1020px; display:table;">
-    		<div id="jsonOutput" style="width:600px; display:table-cell;">
-        	Response:<br><br>
-        	<textarea id="responseTextArea" class="UIInput"
-            	style="width:580px; height:400px;"></textarea>
-    		</div>
     		<div id="imageDiv" style="width:420px; display:table-cell;">
         		Source image:<br><br>
        	 		<img id="sourceImage" width="400" />
     		</div>
-		</div>
 		</span>
 	</div>
 
@@ -140,9 +134,7 @@
 	        })
 
 	        .done(function(data) {
-	            // Show formatted JSON on webpage.
-	            $("#responseTextArea").val(data.persistedFaceId);
-
+	            // Show formatted JSON on webpage
 				trainGroup(subscriptionKey);
 	        })
 

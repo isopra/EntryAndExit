@@ -1,7 +1,7 @@
 @charset "UTF-8";
 h1 {
     text-align: center;
-    padding-bottom: 20px;
+    font-size: 50px;
 }
 
 body {
@@ -11,40 +11,54 @@ body {
 #container {
 	margin-left: auto;
 	margin-right: auto;
-    width: 500px;
+    width: 1000px;
 }
 
 #inline {
 	display: inline-flex;
 }
 
-.entryExit {
-	width: 220px;
-	height: 150px;
-	font-size: 30px;
-	margin: 5px;
+.button {
+	color: #000;
+	border: none;
+	outline: 0;
+	border-radius: 20px;
 	background-color: #6cf;
+	transition: 0.5s;
+	text-align: center;
+	box-shadow: 0 3px 3px rgba(0, 0, 0, 0.28);
+}
+
+.button:hover {
+	background-color: #D3EDFB;
+	color: rgba(0,0,0,0.7);
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.15);
+}
+
+.entryExit {
+	width: 320px;
+	height: 260px;
+	font-size: 40px;
+	margin: 5px 5px 10px 5px;
 }
 
 #record {
-	width: 450px;
-	height: 80px;
-	font-size: 25px;
-	margin-bottom: 5px;
-	background-color: #6cf;
+	width: 650px;
+  	height: 150px;
+  	font-size: 40px;
+  	margin-bottom: 10px;
 }
 
 #member {
-	width: 450px;
-	height: 60px;
-	font-size: 20px;
-	margin-bottom: 5px;
-	background-color: #6cf;
+	width: 650px;
+	height: 90px;
+	font-size: 30px;
+	margin-bottom: 10px;
 }
 
 #location {
-	width: 450px;
-	height: 60px;
-	font-size: 20px;
-	background-color: #6cf;
+	width: 650px;
+	height: 90px;
+	font-size: 30px;
+	margin-bottom: 10px;
 }

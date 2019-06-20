@@ -3,25 +3,42 @@
 #container {
 	margin-left: auto;
 	margin-right: auto;
-	width: 500px;
+	width: 800px;
 }
 
 h1{
 	text-align: center;
-    padding-bottom: 20px;
+    font-size: 50px;
 }
 
 #inline {
 	display: inline-flex;
 }
 
-#return {
+#icon {
+	font-size: 30px;
+	margin-left: 30px;
 	width: 100px;
-	height: 50px;
-	font-size: 20px;
-	margin-left: 50px;
-	margin-right: 40px;
-	background:#6cf;
+	height: 100px;
+	float: left;
+	border-radius: 50%;
+	background-color: #6cf;
+	transition: .3s;
+	outline: 0;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+}
+
+#icon:hover {
+	box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+}
+
+p {
+	font-size: 30px;
+	margin-left: 20px;
+}
+
+select {
+	font-size: 25px;
 }
 
 table {
@@ -35,25 +52,30 @@ thead, tbody {
 tbody {
 	overflow-x: hidden;
 	overflow-y: scroll;
-	height: 350px;
+	height: 450px;
 }
 
 th {
 	padding: 5px;
 	color: white;
 	background: #f96;
+	height: 40px;
+	font-size: 30px;
 }
 
 td {
 	padding: 5px;
 	color: black;
 	background: #fcb;
+	height: 40px;
+	font-size: 20px;
 }
 
 .date {
-	width: 50px;
+	width: 100px;
+	text-align: center;
 }
 
 .entryExit {
-	width: 180px;
+	width: 300px;
 }
