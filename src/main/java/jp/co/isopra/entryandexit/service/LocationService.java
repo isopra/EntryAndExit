@@ -19,7 +19,7 @@ public class LocationService {
 	LocationRepository repository;
 
 	@Autowired
-	private EntityManager entityManager;
+	EntityManager entityManager;
 
 	@SuppressWarnings("unchecked")
 	public List<Location> getAll(){
@@ -32,6 +32,12 @@ public class LocationService {
 				.createQuery("from Location where id = " + id)
 				.getSingleResult();
 	}
+
+	public int delete(int id) {
+			return entityManager
+					.createQuery("delete from Location where id = " + id)
+					.executeUpdate();
+		}
 
 	public Location registerLocation(Location entity) {
 
