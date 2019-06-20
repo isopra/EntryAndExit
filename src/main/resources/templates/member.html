@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type"
     	content="text/html; charset=UTF-8" />
     <link href="/css/member.css" th:href="@{/css/member.css}" rel="stylesheet" >
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
 
@@ -34,8 +34,8 @@
 				</tbody>
 			</table>
 				<div class="wrapper">
-					<button class="button" type="submit" onclick="submitAction('/memberEdit/0')" name="submitButton">編集</button>
-					<button class="button" type="submit" onclick="submitAction('/memberDelete')" name="submitButton">削除</button>
+					<button class="button" type="submit" onclick="submitAction('/memberEdit/0')" >編集</button>
+					<button class="button" type="submit" onclick="submitAction('/memberDelete')" >削除</button>
 				</div>
 		</form>
 	</div>
@@ -43,7 +43,6 @@
 	<script>
 		function submitAction(url) {
 			$('#form-id').attr('action', url);
-			$("button[name=submitButton]").click();
 			//$('#form-id').submit();
 		}
 	</script>

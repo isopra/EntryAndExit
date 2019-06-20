@@ -17,7 +17,7 @@ import jp.co.isopra.entryandexit.service.LocationService;
 public class LocationController {
 
 	@Autowired
-	LocationService service;
+	private LocationService service;
 
 	@RequestMapping("/location")
 	public ModelAndView location(
@@ -76,6 +76,29 @@ public class LocationController {
 		entity.setLocation_id(location_id);
 		entity.setName(name);
 		service.registerLocation(entity);
+		return new ModelAndView("redirect:/location");
+	}
+
+	@RequestMapping(value="/locationDelete", method=RequestMethod.GET)
+	public ModelAndView locationDelete(
+			@ModelAttribute("formModel") Location location,
+			@RequestParam(value="location")int pLocation,
+			ModelAndView mav) {
+		mav.setViewName("locationDelete");
+		mav.addObject("msg",pLocation);
+		Location dataOptional = service.get(pLocation);
+		mav.addObject("formModel", dataOptional);
+		return mav;
+	}
+
+	@RequestMapping(value="/locationDelete", method=RequestMethod.POST)
+	public ModelAndView lecationRemove(
+			@RequestParam(value="location_id") int location_id,
+			ModelAndView mav) {
+
+		Location entity = new Location();
+		entity.setLocation_id(location_id);
+		service.delete(location_id);
 		return new ModelAndView("redirect:/location");
 	}
 }
