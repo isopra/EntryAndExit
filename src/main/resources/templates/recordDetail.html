@@ -51,13 +51,13 @@
  			<input type="hidden" id="created_time" name="created_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}"/>
 
 			<div id="right">
-				<button type="button" id="regist" onclick="Registration()" th:value="${mode}">登録</button>
+				<button type="button" id="regist" onclick="Registration()" th:value="${mode}" class="button" ontouchstart="">登録</button>
 			</div>
 
 		</form>
 
 		<form action="/" id="left">
-			<input type="submit" value="キャンセル" id="cancel"/>
+			<input type="submit" value="キャンセル" id="cancel" class="button" ontouchstart=""/>
 		</form>
 	</div>
 

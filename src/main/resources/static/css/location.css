@@ -1,34 +1,57 @@
 @charset "UTF-8";
 h1{
 	text-align: center;
-    padding-bottom: 20px;
-}
-
-#inline {
-	display: inline-flex;
+    font-size: 50px;
 }
 
 #container {
 	margin-left: auto;
 	margin-right: auto;
-	width: 500px;
+	width: 800px;
 }
 
-#return {
-	margin-left: 80px;
-	margin-right: 140px;
+#icon {
+	font-size: 30px;
+	margin-left: 100px;
+	width: 100px;
+	height: 100px;
+	float: left;
+	border-radius: 50%;
+	background-color: #6cf;
+	transition: .3s;
+	outline: 0;
+	box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+}
+
+#icon:hover {
+	box-shadow: 0 4px 5px 0 rgba(0,0,0,.14), 0 1px 10px 0 rgba(0,0,0,.12), 0 2px 4px -1px rgba(0,0,0,.2);
+}
+
+#new {
+	float: right;
+	margin-right: 100px;
 }
 
 .button {
-	width: 100px;
-	height: 50px;
-	font-size: 20px;
+	display: inline-block;
+	width: 200px;
+	height: 100px;
+	font-size: 30px;
 	background-color: #6cf;
+	border-radius: 10px;
+	border: none;
+	border-bottom: 4px solid #3D7A99;
+	outline: 0;
+}
+
+.button:active {
+	transition: translateY(4px);
+	border-bottom: none;
 }
 
 table {
-	margin-top: 5px;
-	margin-bottom:5px;
+	margin-top: 150px;
+	margin-bottom:10px;
 }
 
 tr {
@@ -39,26 +62,33 @@ th {
 	padding: 5px;
 	color: white;
 	background-color: #F96;
-	width: 80%;
+	width: 500px;
+	height: 40px;
+	font-size: 30px;
 }
 
 td {
 	padding: 5px;
 	color: black;
 	background-color: #FCB;
-	width: 80%;
+	width: 500px;
+	height: 40px;
+	font-size: 30px;
 }
 
 input[type="radio"] {
-	margin-right: 50px;
+	margin-right: 140px;
+	width: 20px;
+	height: 20px;
+	vertical-align: middle;
 }
 
-.wrapper {
-	text-align: center;
+#left {
+	float: left;
+	margin-left: 140px;
 }
 
-#edit {
-	width: 100px;
-	height: 50px;
-	font-size: 20px;
+#right {
+	float: right;
+	margin-right: 140px;
 }

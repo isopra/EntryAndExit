@@ -15,10 +15,10 @@
 
 		<!-- 新規か編集かで表示を切り替える処理 -->
 		<form th:if="${check}" class="hidden">
-			<input type="submit" value="戻る" class="button" id="return"/>
+			<input type="submit" value="&#xf060" class="fas" id="return" ontouchstart=""/>
 		</form>
 		<form action="/member" th:unless="${check}">
-			<input type="submit" value="戻る" class="button" id="return"/>
+			<input type="submit" value="&#xf060" class="fas" id="return" ontouchstart=""/>
 		</form>
 
 		<span th:object="${formModel}">
@@ -32,7 +32,7 @@
 				</div>
 				<form action="/memberRegistFace/0" th:unless="${check}">
 					<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
-					<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon"/></p>
+					<p class="gap">写真追加登録 : <input type="submit" value="&#xf030;" class="fas" id="icon" ontouchstart=""/></p>
 				</form>
 			</div>
 		</span>
@@ -40,13 +40,13 @@
 		<form th:if="${check}" method="post" action="/memberNew/1" name="${formModel}" id="form">
 			<input type="hidden" id="person_id" name="person_id" th:value="*{person_id}"/>
 			<input type="hidden" id="person_name" name="name" th:value="*{name}"/>
-			<div class="wrapper"><button type="button" onclick="getValue('name')" class="button">登録</button></div>
+			<div class="wrapper"><button type="button" onclick="getValue('name')" class="button" ontouchstart="">登録</button></div>
 		</form>
 		<form th:unless="${check}" method="post" action="/memberEdit/0" th:object="${formModel}" id="form">
 			<input type="hidden" id="editmember_id" name="member_id" th:value="*{member_id}"/>
 			<input type="hidden" id="editperson_id" name="person_id" th:value="*{person_id}"/>
 			<input type="hidden" id="editname" name="name" th:value="*{name}"/>
-			<div class="wrapper"><button type="button" id="regist" onclick="editName()" class="button">登録</button></div>
+			<div class="wrapper"><button type="button" id="regist" onclick="editName()" class="button" ontouchstart="">登録</button></div>
 		</form>
 	</div>
 
