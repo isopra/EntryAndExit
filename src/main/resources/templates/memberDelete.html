@@ -1,18 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-
-<link href="/css/memberDelete.css" th:href="@{/css/memberDelete.css}" rel="stylesheet" >
-
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-
+<link href="/css/memberEdit.css" th:href="@{/css/memberEdit.css}" rel="stylesheet" >
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" type="text/css" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
-
 <title>メンバー　削除</title>
-
 </head>
 
 <body>
@@ -20,12 +14,9 @@
 	<div id="container">
 
 		<h1>メンバー削除</h1>
-
-		<div id=inline>
 			<form action="/member">
-				<input type="submit" value="戻る" class="button" id="return"/>
+				<input type="submit" value="&#xf060" class="fas" id="return" ontouchstart=""/>
 			</form>
-		</div>
 
 		<div id=border>
 			<form action="/memberDelete" method="post" th:object="${formModel}" id="form-id">
@@ -36,8 +27,10 @@
 					<input type="hidden" id="personId" th:value="*{person_id}">
 				</span>
 
+				<p class="gap">内容がよろしければ削除を押して下さい。</p>
+
 				<div class="wrapper">
-					<button type="button" onclick="deleteMember()" class="button">削除</button>
+					<button type="button" onclick="deleteMember()" class="button" id="btn" ontouchstart="">削除</button>
 				</div>
 			</form>
 		</div>

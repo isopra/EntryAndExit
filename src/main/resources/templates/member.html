@@ -35,10 +35,10 @@
 				</tbody>
 			</table>
 				<div id="left">
-					<button class="button" type="submit" onclick="submitAction('/memberEdit/0')" name="submitButton" ontouchstart="">編集</button>
+					<button class="button" type="submit" onclick="submitAction('/memberEdit/0')" ontouchstart="">編集</button>
 				</div>
 				<div id="right">
-					<button class="button" type="submit" onclick="submitAction('/memberDelete')" name="submitButton" ontouchstart="">削除</button>
+					<button class="button" type="submit" onclick="submitAction('/memberDelete')" ontouchstart="">削除</button>
 				</div>
 		</form>
 	</div>
@@ -46,7 +46,6 @@
 	<script>
 		function submitAction(url) {
 			$('#form-id').attr('action', url);
-			$("button[name=submitButton]").click();
 			//$('#form-id').submit();
 		}
 	</script>
