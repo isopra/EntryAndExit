@@ -11,11 +11,7 @@
 		<h1>入退室管理</h1>
 		<div id="inline">
 			<form action="/faceCapture/1" id="form-id">
-				<button type="button" class="entryExit button" ontouchstart="" onclick="check()">
-				入室
-				</button>
-				<span th:each="obj, objStat :${recordList}" th:if="${objStat.last == true}">
-				<input type="hidden" th:value="${obj.entry_time}" id="recordList"></span>
+				<input type="submit" value="入室" class="entryExit button" ontouchstart=""/>
 			</form>
 			<form action="/faceCapture/2">
 				<input type="submit" value="退室" class="entryExit button" ontouchstart=""/>
@@ -31,27 +27,5 @@
 			<input type="submit" value="拠点管理" id="location" class="button" ontouchstart=""/>
 		</form>
 	</div>
-
-	<script>
-
-		function check() {
-
-			var today = new Date();
-			var year = today.getFullYear();
-			var month = ("0"+(today.getMonth() + 1)).slice(-2);
-			var date = ("0"+today.getDate()).slice(-2);
-			var YMD = year + "-" + month + "-" + date;
-
-			var registrationEntry = document.getElementById('recordList').value.slice(0, 10);
-
-			if(YMD == registrationEntry) {
-				alert('本日の入室時間は登録済みです。');
-			}else {
-				$("#form-id").submit();
-			}
-
-		}
-
-	</script>
 
 </html>

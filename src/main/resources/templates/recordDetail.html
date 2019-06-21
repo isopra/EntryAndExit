@@ -33,6 +33,7 @@
 				</span></span></p>
 				<p class="gap" th:text="入室時刻： + ${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" th:if="${mode} == 1"></p>
 			    <input th:if="${mode} == 1" name="entry_time" id="entry_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" type="hidden">
+			    <span th:each="obj,objStat:${recordList}" th:if="${objStat.last == true}"><input type="hidden" th:value="${obj.location_id}" id="LocationId"></span>
 
 			<!-- 退室時 -->
 			<span th:if="${mode} == 2" th:each="obj, objStat : ${recordList}">
@@ -67,15 +68,32 @@
 
     function Registration(){
 
+		var today = new Date();
+		var year = today.getFullYear();
+		var month = ("0"+(today.getMonth() + 1)).slice(-2);
+		var date = ("0"+today.getDate()).slice(-2);
+		var YMD = year + "-" + month + "-" + date;
+
+		var registrationEntry = document.getElementById('entry_time').value.slice(0, 10);
+
+		var registrationLocationId = document.getElementById('location_id').value;
+		var registNewLocationId = document.getElementById('LocationId').value;
+
     	var mode = document.getElementById('regist').value;
     	var locationCheck = document.getElementById("location_id").value;
 
     	document.cookie = locationCheck;
 
     	if(mode == 1){
-    		alert("入室時間を記録しました。");
-    		$('form').attr('action',"/recordDetail/regist/1");
-    		$("#form").submit();
+    		if(YMD == registrationEntry && registrationLocationId == registNewLocationId) {
+    			alert('本日の入室時間は登録済みです。');
+        		$('form').attr('action',"/");
+        		$("#form").submit();
+    		}else {
+        		alert("入室時間を記録しました。");
+        		$('form').attr('action',"/recordDetail/regist/1");
+        		$("#form").submit();
+    		}
     	}else if(mode == 2) {
     		alert("退室時間を記録しました。");
     		$('form').attr('action',"/recordDetail/regist/2");
