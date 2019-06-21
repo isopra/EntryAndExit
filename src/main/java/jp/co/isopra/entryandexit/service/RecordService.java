@@ -1,7 +1,8 @@
 package jp.co.isopra.entryandexit.service;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class RecordService {
 	@Autowired
 	private RecordRepository recordRepository;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	@Autowired
+	EntityManager entityManager;
 
 	public Record registerRecord(Record entity) {
 
@@ -27,5 +28,11 @@ public class RecordService {
 		return entity;
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Record> searchEntry(String record_date, int location_id) {
+		return (List<Record>)entityManager
+				.createQuery("from Record where record_date = \'" + record_date + "\' and location_id = " + location_id)
+				.getResultList();
+		}
 
 }
