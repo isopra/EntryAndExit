@@ -5,7 +5,6 @@
 <link href="/css/memberEdit.css" th:href="@{/css/memberEdit.css}" rel="stylesheet" >
 <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" type="text/css" rel="stylesheet">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-<script type="text/javascript" src="js/config.js" th:src="@{/js/config.js}"></script>
 <title>メンバー　削除</title>
 </head>
 
@@ -20,53 +19,31 @@
 
 		<div id=border>
 			<form action="/memberDelete" method="post" th:object="${formModel}" id="form-id">
-				<span th:object="${formModel}">
-					<p class="gap">ID : <span class="gap" id="id" th:text="*{member_id}"></span></p>
-					<p class="gap">氏名 : <span class="gap" id="name" th:text="*{name}"></span></p>
-					<input type="hidden" name="member_id" th:value="*{member_id}">
-					<input type="hidden" id="personId" th:value="*{person_id}">
-				</span>
+					<p class="gap">ID : <input type="text" class="gap" id="id" name="member_id" th:value="*{member_id}" readonly="readonly"/></p>
+					<p class="gap">氏名 : <input type="text" class="gap" id="name" name="name" th:value="*{name}" readonly="readonly"/></p>
 
 				<p class="gap">内容がよろしければ削除を押して下さい。</p>
 
 				<div class="wrapper">
-					<button type="button" onclick="deleteMember()" class="button" id="btn" ontouchstart="">削除</button>
+					<button type="submit" class="button" id="btn" ontouchstart="">削除</button>
 				</div>
 			</form>
 		</div>
 
 	</div>
 
-	<script>
-		var subscriptionKey = getSubscriptionKey();
-		var person_id = document.getElementById('personId').value;
-
-		function deleteMember() {
-			var uriBase = "https://japaneast.api.cognitive.microsoft.com/face/v1.0/persongroups/sample/persons/" + person_id;
-
-	        $.ajax({
-	            url: uriBase ,
-	            beforeSend: function(xhrObj){
-	                xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", subscriptionKey);
-	            },
-	            type: "DELETE",
-	        })
-
-	        .done(function(data) {
-	        	$('#form-id').submit();
-	        })
-
-	        .fail(function(jqXHR, textStatus, errorThrown) {
-	            // Display error message.
-	            var errorString = (errorThrown === "") ?
-	                "Error. " : errorThrown + " (" + jqXHR.status + "): ";
-	            errorString += (jqXHR.responseText === "") ?
-	                "" : (jQuery.parseJSON(jqXHR.responseText).message) ?
-	                    jQuery.parseJSON(jqXHR.responseText).message :
-	                        jQuery.parseJSON(jqXHR.responseText).error.message;
-	            alert(errorString);
-	        })
-		}
+	<script type="text/javascript">
+		// 「input」タグを読み取り専用にする処理
+		$(function(){
+			var inputItem = document.getElementsByTagName("input");
+			for(var i = 0; i < inputItem.length; i++){
+				if(inputItem[i].readOnly){
+					inputItem[i].style.backgroundColor = "#fff";
+					inputItem[i].tabIndex = "-1";
+					inputItem[i].style.cursor = "not-allowed";
+				}
+			}
+		})
 	</script>
 
 </body>

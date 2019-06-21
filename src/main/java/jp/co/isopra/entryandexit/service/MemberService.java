@@ -25,11 +25,14 @@ public class MemberService {
 	@SuppressWarnings("unchecked")
 	public List<Member> getAll() {
 		return (List<Member>) entityManager
-				.createQuery("from Member").getResultList();
+				.createQuery("from Member order by member_id").getResultList();
 	}
 
-
-
+	public int update(int member_id, boolean delete_flag) {
+		return entityManager
+				.createQuery("update Member set delete_flag = " + delete_flag + " where member_id = " + member_id)
+				.executeUpdate();
+	}
 
 	//MemberServiceTest用
 	public Member registerMember(Member entity) {

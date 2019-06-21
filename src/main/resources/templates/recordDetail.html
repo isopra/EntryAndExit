@@ -20,7 +20,9 @@
 
 				<div class="gap">拠点 :
 				<select name="location_id" id="location_id">
-					<option th:each="obj: ${locationList}" th:text=${obj.name} th:value="${obj.location_id}"></option>
+				<td th:each="obj: ${locationList}" >
+					<option  th:if="${obj.delete_flag == false}"th:text=${obj.name} th:value="${obj.location_id}"></option>
+				</td>
 				</select>
 				</div>
 

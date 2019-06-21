@@ -34,4 +34,5 @@ public class RecordService {
 				.createQuery("from Record where record_date = \'" + record_date + "\' and location_id = " + location_id)
 				.getResultList();
 		}
+
 }
