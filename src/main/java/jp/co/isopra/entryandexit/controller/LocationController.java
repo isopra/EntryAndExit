@@ -94,11 +94,13 @@ public class LocationController {
 	@RequestMapping(value="/locationDelete", method=RequestMethod.POST)
 	public ModelAndView lecationRemove(
 			@RequestParam(value="location_id") int location_id,
-			ModelAndView mav) {
+			@RequestParam(value="name") String name) {
 
 		Location entity = new Location();
 		entity.setLocation_id(location_id);
-		service.delete(location_id);
+		entity.setName(name);
+		entity.setDelete_flag(true);
+		service.registerLocation(entity);
 		return new ModelAndView("redirect:/location");
 	}
 }
