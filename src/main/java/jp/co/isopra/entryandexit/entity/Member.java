@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
@@ -27,6 +28,11 @@ public class Member {
 	@NotNull
 	@Length(max=100)
 	private String name;
+
+	@Column
+	@NotNull
+	@Where(clause="delete_flag = false")
+	private boolean delete_flag;
 
 	public int getMember_id() {
 		return member_id;
@@ -51,5 +57,15 @@ public class Member {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public boolean isDelete_flag() {
+		return delete_flag;
+	}
+
+	public void setDelete_flag(boolean delete_flag) {
+		this.delete_flag = delete_flag;
+	}
+
+
 
 }

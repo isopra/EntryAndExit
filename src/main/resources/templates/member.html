@@ -27,23 +27,23 @@
 				<thead>
 					<tr><th>メンバー</th></tr>
 				</thead>
-				<tbody>
+				<tbody id="tbody">
 					<tr th:each="obj : ${list}">
-						<td><input id="member" type="radio" th:text="${obj.member_id} + ' ' + ${obj.name}"
+						<td th:if="${obj.delete_flag} == false"><input id="member" type="radio" th:text="${obj.name}"
 						name="member" th:value="${obj.member_id}" required/></td>
 					</tr>
 				</tbody>
 			</table>
 				<div id="left">
-					<button class="button" type="submit" onclick="submitAction('/memberEdit/0')" ontouchstart="">編集</button>
+					<button class="button" type="submit" id="edit" onclick="submitAction('/memberEdit/0')" ontouchstart="">編集</button>
 				</div>
 				<div id="right">
-					<button class="button" type="submit" onclick="submitAction('/memberDelete')" ontouchstart="">削除</button>
+					<button class="button" type="submit" id="delete" onclick="submitAction('/memberDelete')" ontouchstart="">削除</button>
 				</div>
 		</form>
 	</div>
 
-	<script>
+	<script th:inline="javascript">
 		function submitAction(url) {
 			$('#form-id').attr('action', url);
 			//$('#form-id').submit();
