@@ -29,7 +29,7 @@
 				</thead>
 				<tbody>
 					<tr th:each="obj : ${list}">
-						<td><input id="member" type="radio" th:text="${obj.member_id} + ' ' + ${obj.name}"
+						<td><input id="member" type="radio" th:text="${obj.name}"
 						name="member" th:value="${obj.member_id}" required/></td>
 					</tr>
 				</tbody>
