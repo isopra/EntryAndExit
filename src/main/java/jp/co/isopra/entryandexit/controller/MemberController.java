@@ -144,10 +144,9 @@ public class MemberController {
 	@RequestMapping(value="/memberDelete", method=RequestMethod.POST)
 	@Transactional(readOnly = false)
 	public ModelAndView memberDeleteDB(
-			@RequestParam(value="member_id") Member member_id,
+			@RequestParam(value="member_id") int member_id,
 			ModelAndView mav) {
-		mav.setViewName("member");
-		repository.delete(member_id);
+		service.update(member_id, true);
 		return new ModelAndView("redirect:/member");
 	}
 
