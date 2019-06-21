@@ -39,14 +39,9 @@ public class HeloController {
 	LocationService locationService;
 
 
-	@RequestMapping(value="/")
-	public ModelAndView index(ModelAndView mav) {
-		Iterable<Record>recordList = recordRepository.findAll();
-
-		mav.setViewName("index");
-		mav.addObject("recordList", recordList);
-
-		return mav;
+	@RequestMapping("/")
+	public String index() {
+		return "index";
 	}
 
 	@RequestMapping("/faceCapture/{mode}")
