@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Where;
+
 @Entity
 @Table(name="location")
 public class Location {
@@ -20,6 +22,12 @@ public class Location {
 	@Column
 	@NotNull
 	private String name;
+
+	@Column
+	@NotNull
+	@Where(clause="delete_flag = 0")
+	private boolean delete_flag;
+
 
 	public int getLocation_id() {
 		return location_id;
@@ -35,6 +43,14 @@ public class Location {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public boolean isDelete_flag() {
+		return delete_flag;
+	}
+
+	public void setDelete_flag(boolean delete_flag) {
+		this.delete_flag = delete_flag;
 	}
 
 }

@@ -3,21 +3,26 @@
 <head>
 <title>入退室管理</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="/css/record.css" th:href="@{/css/record.css}" rel="stylesheet">
-<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" type="text/css" rel="stylesheet">
+<link href="/css/record.css" th:href="@{/css/record.css}"
+	rel="stylesheet">
+<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css"
+	type="text/css" rel="stylesheet">
 </head>
 <body onload="selectchange()">
 	<div id="container">
 		<h1>入退室記録 参照</h1>
 		<div id="inline">
 			<form action="/">
-				<input type="submit" value="&#xf060" id="icon" class="fas" ontouchstart=""/>
+				<input type="submit" value="&#xf060" id="icon" class="fas"
+					ontouchstart="" />
 			</form>
 			<p>
-				対象拠点 : <select  name="location" id="location"
+				対象拠点 : <select name="location" id="location"
 					onchange="selectchange();">
-					<option th:each="obj: ${locationT}" th:value="${obj.name}" th:text="${obj.name}" th:id="${obj.location_id}">
-					</option>
+					<td th:each="obj: ${locationT}" th:if="${obj.delete_flag == false}">
+						<option th:value="${obj.name}" th:text="${obj.name}"
+							th:id="${obj.location_id}"></option>
+				</td>
 				</select>
 			</p>
 			<p>
@@ -27,13 +32,13 @@
 			</p>
 		</div>
 		<table align="center">
-				<thead>
-					<tr>
-						<th class="date">日付</th>
-						<th class="entryExit">入室</th>
-						<th class="entryExit">退出</th>
-					</tr>
-				</thead>
+			<thead>
+				<tr>
+					<th class="date">日付</th>
+					<th class="entryExit">入室</th>
+					<th class="entryExit">退出</th>
+				</tr>
+			</thead>
 			<tbody id="tbody">
 			</tbody>
 		</table>
@@ -124,8 +129,6 @@
 
 
 		for (i = 1; i <= sue; i++) {
-			var highRow ={};
-			console.log(highRow);
 			var en_T = "";
 			var ex_T = "";
 			var en_N = "";
@@ -137,6 +140,7 @@
 				checkday = first+'-'+secound+"-"+i;
 			}
 			for(k = 0;k < RT.length; k++){
+				console.log(RT[k].entry_time.toString().substr(11,5));
 				if(RT[k].record_date.toString().substr(0,10) == checkday && RT[k].location_id == selects){
 					en_T = RT[k].entry_time.toString().substr(11,5);
 					if(!(RT[k].exit_time == null))
@@ -151,16 +155,12 @@
 					}
 				}
 			}
-			highRow['Entry'] = en_T;
-			highRow['Exit'] = ex_T;
-			highRow['EntryName'] = en_N;
-			highRow['ExitName'] = ex_N;
-			console.log(highRow);
+
 		    var div_element = document.createElement("tr");
 		    console.log(div_element);
 		    div_element.innerHTML = '<td id="day" class="date">'+ fday +'</td>'
-		    +'<td id="entry" class="entryExit">'+ highRow['Entry'] + " " + highRow['EntryName']+'</td>'
-		    +'<td id="exit" class="entryExit">'+ highRow['Exit'] + " " + highRow['ExitName']+'</td>';
+		    +'<td id="entry" class="entryExit">'+ en_T + " " + en_N+'</td>'
+		    +'<td id="exit" class="entryExit">'+ ex_T + " " + ex_N+'</td>';
 		    var parent_object = document.getElementById("tbody");
 		    parent_object.appendChild(div_element);
 

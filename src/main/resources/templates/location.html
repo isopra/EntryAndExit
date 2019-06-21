@@ -21,7 +21,9 @@
 			<table align="center">
 				<tr><th>拠点</th></tr>
 				<tr th:each="obj: ${list}">
-					<td><input type="radio" th:text="${obj.name}" name="location" th:value="${obj.location_id}" required/></td>
+					<td th:if="${obj.delete_flag == false}">
+					<input  type="radio" th:text="${obj.name}" name="location" th:value="${obj.location_id}" required/>
+					</td>
 				</tr>
 			</table>
 			<div id="left">
