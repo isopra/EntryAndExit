@@ -3,6 +3,7 @@ package jp.co.isopra.entryandexit.controller;
 
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,35 +72,34 @@ public class RecordController {
 	@RequestMapping("/recordDetail/regist/1")
 	public ModelAndView recordEntryRegist(
 			@ModelAttribute("formModel") @Validated Record record,
-			@RequestParam(value="record_date") String record_date,
-			ModelAndView mav
-			){
 
-		recordRepository.saveAndFlush(record);
-		mav = new ModelAndView("redirect:/");
+			@RequestParam(value="entry_time" )Timestamp entry_time,
+			@RequestParam(value="location_id")int location_id,
+			@RequestParam(value="created_time")Timestamp created_time,
+			@RequestParam(value="entry_member_id")int entry_member_id) {
 
-		return mav;
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			Date record_date = java.sql.Date.valueOf(sdf.format(entry_time));
+			Record entity = new Record();
+			entity.setRecord_date(record_date);
+			entity.setLocation_id(location_id);
+			entity.setCreated_time(created_time);
+			entity.setEntry_time(entry_time);
+			entity.setEntry_member_id(entry_member_id);
+			recordService.registerRecord(entity);
+			return new ModelAndView("redirect:/");
 
 	}
 
 	@RequestMapping("/recordDetail/regist/2")
 	public ModelAndView recordExitRegist(
-			@RequestParam(value="record_date")Date record_date,
+			@RequestParam(value="record_date")String record_date,
 			@RequestParam(value="location_id")int location_id,
 			@RequestParam(value="exit_member_id")int exit_member_id,
+			@RequestParam(value="exit_time")String exit_time_s,
 			@RequestParam(value="exit_time")Timestamp exit_time,
-			@RequestParam(value="created_time")Timestamp created_time,
-			@RequestParam(value="entry_member_id")int entry_member_id,
-			@RequestParam(value="entry_time")Timestamp entry_time) {
-		Record entity = new Record();
-		entity.setRecord_date(record_date);
-		entity.setLocation_id(location_id);
-		entity.setExit_member_id(exit_member_id);
-		entity.setExit_time(exit_time);
-		entity.setCreated_time(created_time);
-		entity.setEntry_member_id(entry_member_id);
-		entity.setEntry_time(entry_time);
-		recordService.registerRecord(entity);
+			@RequestParam(value="created_time")Timestamp created_time) {
+		recordService.update(exit_time_s, location_id, exit_member_id, exit_time, created_time);
 		return new ModelAndView("redirect:/");
 	}
 
