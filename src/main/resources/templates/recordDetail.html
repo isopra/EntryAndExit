@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 
-<body onload="Firstlocation()">
+<body onload="Firstlocation();addEntry();dayChange()">
 	<div id="container">
 	<h1 th:if="${mode} == 1">入室記録</h1>
 	<h1 th:if="${mode} == 2">退室記録</h1>
@@ -29,11 +29,27 @@
 			<!-- 入室時 -->
 				<p class="gap" th:if="${mode} == 1">入室者：
 				<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
-				<input name="entry_member_id" th:text="${obj.name}" id="entry_member_id" th:value="${obj.member_id}" type="hidden" >
+				<input name="entry_member_id" th:text="${obj.name}" id="entry_member_id" th:value="${obj.member_id}" type="hidden" readonly="readonly">
 				</span></span></p>
-				<p class="gap" th:text="入室時刻： + ${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" th:if="${mode} == 1"></p>
-			    <input th:if="${mode} == 1" name="entry_time" id="entry_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" type="hidden">
-
+				<p class="gap" th:if="${mode} == 1">
+				入室時刻：
+				<select  id="year">
+				</select>
+				年
+				<select  id="month" onchange="dayChange()">
+				</select>
+				月
+				<select  id="day">
+				</select>
+				日
+				<select  id="hours">
+				</select>
+				時
+				<select  id="minutes">
+				</select>
+				分
+				</p>
+ 			    <input th:if="${mode} == 1"id="entry_time"  type="hidden" >
 			<!-- 退室時 -->
 			<span th:if="${mode} == 2" th:each="obj, objStat : ${recordList}">
 				<span th:if="${objStat.last} == true">
@@ -45,9 +61,25 @@
 				<span th:each="obj: ${memberList}"><span th:if="${obj.person_id} == ${personId}">
 				<input name="exit_member_id" th:text="${obj.name}" id="exit_member_id" th:value="${obj.member_id}" type="hidden" >
 				</span></span></p>
-				<p class="gap" th:text="退室時刻： + ${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" th:if="${mode} == 2"></p>
-			    <input th:if="${mode} == 2" name="exit_time" id="exit_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" type="hidden">
-
+				<p class="gap" th:if="${mode} == 2">
+				入室時刻：
+				<select  id="year">
+				</select>
+				年
+				<select  id="month" onchange="dayChange()">
+				</select>
+				月
+				<select  id="day">
+				</select>
+				日
+				<select  id="hours">
+				</select>
+				時
+				<select  id="minutes">
+				</select>
+				分
+				</p>
+ 			    <input th:if="${mode} == 2"id="exit_time"  type="hidden" >
 			</div>
 
  			<input type="hidden" id="created_time" name="created_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}"/>
@@ -67,15 +99,36 @@
     function Registration(){
     	var mode = document.getElementById('regist').value;
     	var locationCheck = document.getElementById("location_id").value;
+    	var year_element_val = year_element.value;
+    	var month_element_val = month_element.value;
+    	var day_element_val = day_element.value;
+    	var hours_element_val = hours_element.value;
+    	var minutes_element_val = minutes_element.value;
+    	var regist_time = year_element_val + "-" + month_element_val + "-"
+    	+ day_element_val + " " + hours_element_val + ":" + minutes_element_val + ":" + "00";
+    	var secound_today = new Date(year_element_val,month_element_val,day_element_val,hours_element_val,minutes_element_val,00);
+    	console.log(regist_time);
     	console.log(locationCheck);
     	document.cookie = locationCheck;
     	if(mode == 1){
-    		console.log(document.getElementById('entry_time').value);
+    	   	var entry_regist = document.getElementById("entry_time");
+    	   	if(today < secound_today){
+    	   		alert("現在または過去の時刻を記録してください！");
+    	   		return;
+    	   	}
     		alert("入室時間を記録しました。");
+    		entry_regist.innerHTML = "<input name = entry_time id= entry_time value= '"+ regist_time +"' type= hidden>";
+    		console.log(document.getElementById('entry_time'));
     		$('form').attr('action',"/recordDetail/regist/1");
     		$("#form").submit();
     	}else if(mode == 2) {
+    	   	var entry_regist = document.getElementById("exit_time");
+    	   	if(today < secound_today){
+    	   		alert("現在または過去の時刻を記録してください！");
+    	   		return;
+    	   	}
     		alert("退室時間を記録しました。");
+    		entry_regist.innerHTML = "<input name = exit_time id= exit_time value= '"+ regist_time +"' type= hidden>";
     		$('form').attr('action',"/recordDetail/regist/2");
     		$("#form").submit();
     	}else {
@@ -112,6 +165,70 @@
      		location_element.innerHTML = element;
     	}
 
+    }
+
+  	var today = new Date();
+  	var year_element = document.getElementById("year");
+	var month_element = document.getElementById("month");
+	var hours_element = document.getElementById("hours");
+	var minutes_element = document.getElementById("minutes");
+	var day_element = document.getElementById("day");
+    function addEntry() {
+    	var year_now = today.getFullYear();
+    	var month_now = today.getMonth() + 1;
+    	var hours_now = today.getHours();
+    	var minutes_now = today.getMinutes();
+    	var year_opt,month_opt,hours_opt,minutes_opt;
+
+    	year_opt += "<option value='"+ year_now +"'selected>" + year_now + "</option>";
+    	year_now--;
+    	year_opt += "<option value='"+ year_now +"'>" + year_now + "</option>";
+    	for(i = 1; i <= 12;i++){
+    		if(i==month_now){
+    			month_opt +="<option value='"+ i +"' selected>" + i + "</option>";
+    		}else{
+    		month_opt +="<option value='"+ i +"' >" + i + "</option>";
+    		}
+    	}
+    	for(i = 0; i <= 23;i++){
+    		if(i==hours_now){
+    			hours_opt +="<option value='"+ i +"' selected>" + i + "</option>";
+    		}else{
+    		hours_opt +="<option value='"+ i +"' >" + i + "</option>";
+    		}
+    	}
+    	for(i = 0; i <= 59;i++){
+    		if(i==minutes_now){
+    			minutes_opt +="<option value='"+ i +"' selected>" + i + "</option>";
+    		}else{
+    		minutes_opt +="<option value='"+ i +"' >" + i + "</option>";
+    		}
+    	}
+    	year_element.innerHTML = year_opt;
+    	month_element.innerHTML = month_opt;
+    	hours_element.innerHTML = hours_opt;
+    	minutes_element.innerHTML = minutes_opt;
+    	}
+
+    var getMonthDays = function(year, month) {
+		return new Date(year, month, 0).getDate();
+	};
+
+    function dayChange(){
+    	var day_opt;
+    	var day_now = today.getDate();
+    	var year_element_val = document.getElementById("year").value;
+    	var month_element_val = document.getElementById("month").value;
+    	var sue = getMonthDays(year_element_val,month_element_val);
+
+    	for(i =1; i <= sue;i++){
+    		if(i==day_now){
+    			day_opt += "<option value='"+ i +"' selected>" + i + "</option>";
+    		}else{
+    			day_opt += "<option value='"+ i +"'>" + i + "</option>";
+    		}
+    	}
+    	day_element.innerHTML = day_opt;
     }
     </script>
 
