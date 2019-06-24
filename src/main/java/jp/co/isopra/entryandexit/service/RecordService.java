@@ -29,9 +29,9 @@ public class RecordService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<Record> searchEntry(String record_date, int location_id) {
+	public List<Record> searchEntry(String record_date) {
 		return (List<Record>)entityManager
-				.createQuery("from Record where record_date = \'" + record_date + "\' and location_id = " + location_id)
+				.createQuery("from Record where record_date = \'" + record_date + "\'")
 				.getResultList();
 		}
 

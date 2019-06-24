@@ -72,16 +72,11 @@ public class RecordController {
 	public ModelAndView recordEntryRegist(
 			@ModelAttribute("formModel") @Validated Record record,
 			@RequestParam(value="record_date") String record_date,
-			@RequestParam(value="location_id") int location_id,
 			ModelAndView mav
-			) {
+			){
 
-		if(recordService.searchEntry(record_date, location_id).size() == 0) {
-			recordRepository.saveAndFlush(record);
-			mav = new ModelAndView("redirect:/");
-		}else {
-			mav = new ModelAndView("redirect:/");
-		}
+		recordRepository.saveAndFlush(record);
+		mav = new ModelAndView("redirect:/");
 
 		return mav;
 

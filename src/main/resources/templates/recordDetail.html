@@ -17,7 +17,6 @@
 
 				<p class="gap" th:text="日付：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd')}"></p>
 				<input th:value="${#dates.format(new java.util.Date(),'yyyy/MM/dd')}" name="record_date" type="hidden" id="record_date">
-				<span th:each="obj,objStat:${recordList}" th:if="${objStat.last == true}"><input type="hidden" th:value="${obj.record_date}" id="RecordDate"></span>
 
 				<div class="gap">拠点 :
 				<select name="location_id" id="location_id">
@@ -25,7 +24,6 @@
 					<option  th:if="${obj.delete_flag == false}"th:text=${obj.name} th:value="${obj.location_id}"></option>
 				</td>
 				</select>
-
 				</div>
 
 			<!-- 入室時 -->
@@ -35,7 +33,6 @@
 				</span></span></p>
 				<p class="gap" th:text="入室時刻： + ${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" th:if="${mode} == 1"></p>
 			    <input th:if="${mode} == 1" name="entry_time" id="entry_time" th:value="${#dates.format(new java.util.Date(),'yyyy-MM-dd HH:mm:ss')}" type="hidden">
-			    <span th:each="obj,objStat:${recordList}" th:if="${objStat.last == true}"><input type="hidden" th:value="${obj.location_id}" id="LocationId"></span>
 
 			<!-- 退室時 -->
 			<span th:if="${mode} == 2" th:each="obj, objStat : ${recordList}">
@@ -70,39 +67,60 @@
 
     function Registration(){
 
-		var today = new Date();
-		var year = today.getFullYear();
-		var month = ("0"+(today.getMonth() + 1)).slice(-2);
-		var date = ("0"+today.getDate()).slice(-2);
-		var YMD = year + "-" + month + "-" + date;
+    	//登録時のlocation_id
+    	var registrationLocationId = document.getElementById('location_id').value;
 
-		var registrationEntry = document.getElementById('RecordDate').value.slice(0, 10);
-
-		var registrationLocationId = document.getElementById('location_id').value;
-		var registNewLocationId = document.getElementById('LocationId').value;
-
+    	//画面遷移用変数mode
     	var mode = document.getElementById('regist').value;
-    	var locationCheck = document.getElementById("location_id").value;
 
-    	document.cookie = locationCheck;
+    	//登録時の時間(record_date)
+    	var today = new Date();
+    	var year = today.getFullYear();
+    	var month = ("0"+(today.getMonth() + 1)).slice(-2);
+    	var date =  ("0"+today.getDate()).slice(-2);
+    	var YMD = year + "-" + month + "-" + date;
 
-    	if(mode == 1){
-    		if(YMD == registrationEntry && registrationLocationId == registNewLocationId) {
-    			alert('本日の入室時間は登録済みです。');
-        		$('form').attr('action',"/");
-        		$("#form").submit();
-    		}else {
+    	//登録初回用
+    	var RecordList = [[${RecordList}]];
+    	var registration = false;
+
+    	//テーブル参照用
+    	var recordList = [[${recordList}]];
+
+    	//cookie用
+    	var locationCheck = document.getElementById('location_id').value;
+		document.cookie = locationCheck;
+
+
+    	//recordList(recordテーブル)と、登録時のrecord_date, location_idを比較
+    	function registrationEntry() {
+    		recordList.forEach( function( value ){
+    			if(value.record_date.slice(0,10) == YMD && value.location_id == registrationLocationId) {
+    				registration = true;
+    				return registration;
+    			}
+    		})
+    	}
+
+    	if(mode == 1) {
+    		registrationEntry();
+    		if(registration == false){
         		alert("入室時間を記録しました。");
         		$('form').attr('action',"/recordDetail/regist/1");
         		$("#form").submit();
-    		}
+    		}else {
+        		alert('本日の入室時間は登録済みです。');
+        		$('form').attr('action',"/");
+        		$("#form").submit();
+       		}
     	}else if(mode == 2) {
-    		alert("退室時間を記録しました。");
-    		$('form').attr('action',"/recordDetail/regist/2");
-    		$("#form").submit();
-    	}else {
-    		alert("error: 入退室時間を記録できませんでした。");
-    	}
+        	alert("退室時間を記録しました。");
+        	$('form').attr('action',"/recordDetail/regist/2");
+        	$("#form").submit();
+        }else {
+        	alert("error: 入退室時間を記録できませんでした。");
+        }
+
     }
 
     function Firstlocation(){
