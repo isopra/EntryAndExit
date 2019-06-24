@@ -112,7 +112,7 @@
     	var hours_element_val = hours_element.value;
     	var minutes_element_val = minutes_element.value;
     	var regist_time = year_element_val + "-" + month_element_val + "-"
-    	+ day_element_val + " " + hours_element_val + ":" + minutes_element_val + ":" + seconds;
+    	+ day_element_val + " " + hours_element_val + ":" + minutes_element_val + ":" + 00;
     	var secound_today = new Date(year_element_val,month_element_val-1,day_element_val,hours_element_val,minutes_element_val,00);
     	console.log(regist_time);
     	console.log(locationCheck);
@@ -123,7 +123,7 @@
     	var year = today.getFullYear();
     	var month = ("0"+(today.getMonth() + 1)).slice(-2);
     	var date =  ("0"+today.getDate()).slice(-2);
-    	var YMD = year + "-" + month + "-" + date;
+    	var YMD = year_element_val + "-" + month_element_val + "-"+ day_element_val;
 
     	//登録初回用
     	var RecordList = [[${RecordList}]];
@@ -135,15 +135,18 @@
     	//recordList(recordテーブル)と、登録時のrecord_date, location_idを比較
     	function registrationEntry() {
     		recordList.forEach( function( value ){
+        		console.log(value.record_date.slice(0,10));
+        		console.log(YMD);
     			if(value.record_date.slice(0,10) == YMD && value.location_id == registrationLocationId) {
     				registration = true;
     				return registration;
     			}
     		})
     	}
-		console.log(today);
-		console.log(secound_today);
-    	if(today <= secound_today){
+
+    	console.log(today);
+    	console.log(secound_today);
+    	if(today < secound_today){
 	   		alert("現在または過去の時刻を記録してください！");
 	   		return;
 	   	}
@@ -156,7 +159,7 @@
         		$('form').attr('action',"/recordDetail/regist/1");
         		$("#form").submit();
     		}else {
-        		alert('本日の入室時間は登録済みです。');
+        		alert('指定日の入室時間は登録済みです。');
         		$('form').attr('action',"/");
         		$("#form").submit();
        		}
@@ -202,7 +205,6 @@
     }
 
   	var today = new Date();
-  	var seconds = today.getSeconds();
   	var year_element = document.getElementById("year");
 	var month_element = document.getElementById("month");
 	var hours_element = document.getElementById("hours");
@@ -219,11 +221,23 @@
     	year_now--;
     	year_opt += "<option value='"+ year_now +"'>" + year_now + "</option>";
     	for(i = 1; i <= 12;i++){
-    		if(i==month_now){
-    			month_opt +="<option value='"+ i +"' selected>" + i + "</option>";
-    		}else{
-    		month_opt +="<option value='"+ i +"' >" + i + "</option>";
+    		if(i <= 9){
+    			var zero = "0"+i;
+        		if(i==month_now){
+        			month_opt +="<option value='"+ zero +"' selected>" +zero + "</option>";
+        		}else{
+        		month_opt +="<option value='"+ zero +"' >" + zero + "</option>";
+        		}
+
     		}
+    		else{
+    			if(i==month_now){
+        			month_opt +="<option value='"+ zero +"' selected>" +zero + "</option>";
+        		}else{
+        		month_opt +="<option value='"+ zero +"' >" + zero + "</option>";
+        		}
+    		}
+
     	}
     	for(i = 0; i <= 23;i++){
     		if(i==hours_now){
@@ -257,11 +271,21 @@
     	var sue = getMonthDays(year_element_val,month_element_val);
 
     	for(i =1; i <= sue;i++){
-    		if(i==day_now){
-    			day_opt += "<option value='"+ i +"' selected>" + i + "</option>";
+    		if(i <= 9){
+    			var zero = "0"+i;
+    			if(i==day_now){
+        			day_opt += "<option value='"+ zero +"' selected>" + zero + "</option>";
+        		}else{
+        			day_opt += "<option value='"+ zero +"'>" + zero + "</option>";
+        		}
     		}else{
-    			day_opt += "<option value='"+ i +"'>" + i + "</option>";
+    			if(i==day_now){
+        			day_opt += "<option value='"+ i +"' selected>" + i + "</option>";
+        		}else{
+        			day_opt += "<option value='"+ i +"'>" + i + "</option>";
+        		}
     		}
+
     	}
     	day_element.innerHTML = day_opt;
     }
