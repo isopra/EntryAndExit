@@ -2,15 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 	<title>入退室管理</title>
-	<meta http-equiv="Content-Type"
-    	content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link href="/css/index.css" th:href="@{/css/index.css}" rel="stylesheet" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 </head>
 <body>
 	<div id="container">
 		<h1>入退室管理</h1>
 		<div id="inline">
-			<form action="/faceCapture/1">
+			<form action="/faceCapture/1" id="form-id">
 				<input type="submit" value="入室" class="entryExit button" ontouchstart=""/>
 			</form>
 			<form action="/faceCapture/2">
@@ -27,4 +27,5 @@
 			<input type="submit" value="拠点管理" id="location" class="button" ontouchstart=""/>
 		</form>
 	</div>
+</body>
 </html>

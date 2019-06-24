@@ -72,6 +72,7 @@ public class RecordController {
 	@RequestMapping("/recordDetail/regist/1")
 	public ModelAndView recordEntryRegist(
 			@ModelAttribute("formModel") @Validated Record record,
+
 			@RequestParam(value="entry_time" )Timestamp entry_time,
 			@RequestParam(value="location_id")int location_id,
 			@RequestParam(value="created_time")Timestamp created_time,
@@ -87,6 +88,7 @@ public class RecordController {
 			entity.setEntry_member_id(entry_member_id);
 			recordService.registerRecord(entity);
 			return new ModelAndView("redirect:/");
+
 	}
 
 	@RequestMapping("/recordDetail/regist/2")

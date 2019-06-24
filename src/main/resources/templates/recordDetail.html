@@ -16,7 +16,7 @@
 			<div id="border">
 
 				<p class="gap" th:text="日付：+ ${#dates.format(new java.util.Date(),'yyyy/MM/dd')}"></p>
-				<input th:value="${#dates.format(new java.util.Date(),'yyyy/MM/dd HH:mm:ss')}" name="record_date" type="hidden" id="record_date">
+				<input th:value="${#dates.format(new java.util.Date(),'yyyy/MM/dd')}" name="record_date" type="hidden" id="record_date">
 
 				<div class="gap">拠点 :
 				<select name="location_id" id="location_id">
@@ -33,7 +33,7 @@
 				</span></span></p>
 				<p class="gap" th:if="${mode} == 1">
 				入室時刻：
-				<select  id="year">
+				<select  id="year" onchange="dayChange()">
 				</select>
 				年
 				<select  id="month" onchange="dayChange()">
@@ -96,44 +96,80 @@
 	</div>
 
 	<script th:inline="javascript">
+
     function Registration(){
+
+    	//登録時のlocation_id
+    	var registrationLocationId = document.getElementById('location_id').value;
+
+    	//画面遷移用変数mode
     	var mode = document.getElementById('regist').value;
     	var locationCheck = document.getElementById("location_id").value;
+		document.cookie = locationCheck;
     	var year_element_val = year_element.value;
     	var month_element_val = month_element.value;
     	var day_element_val = day_element.value;
     	var hours_element_val = hours_element.value;
     	var minutes_element_val = minutes_element.value;
     	var regist_time = year_element_val + "-" + month_element_val + "-"
-    	+ day_element_val + " " + hours_element_val + ":" + minutes_element_val + ":" + "00";
-    	var secound_today = new Date(year_element_val,month_element_val,day_element_val,hours_element_val,minutes_element_val,00);
+    	+ day_element_val + " " + hours_element_val + ":" + minutes_element_val + ":" + seconds;
+    	var secound_today = new Date(year_element_val,month_element_val-1,day_element_val,hours_element_val,minutes_element_val,00);
     	console.log(regist_time);
     	console.log(locationCheck);
-    	document.cookie = locationCheck;
-    	if(mode == 1){
-    	   	var entry_regist = document.getElementById("entry_time");
-    	   	if(today < secound_today){
-    	   		alert("現在または過去の時刻を記録してください！");
-    	   		return;
-    	   	}
-    		alert("入室時間を記録しました。");
-    		entry_regist.innerHTML = "<input name = entry_time id= entry_time value= '"+ regist_time +"' type= hidden>";
-    		console.log(document.getElementById('entry_time'));
-    		$('form').attr('action',"/recordDetail/regist/1");
-    		$("#form").submit();
-    	}else if(mode == 2) {
-    	   	var entry_regist = document.getElementById("exit_time");
-    	   	if(today < secound_today){
-    	   		alert("現在または過去の時刻を記録してください！");
-    	   		return;
-    	   	}
-    		alert("退室時間を記録しました。");
-    		entry_regist.innerHTML = "<input name = exit_time id= exit_time value= '"+ regist_time +"' type= hidden>";
-    		$('form').attr('action',"/recordDetail/regist/2");
-    		$("#form").submit();
-    	}else {
-    		alert("error: 入退室時間を記録できませんでした。");
+
+
+    	//登録時の時間(record_date)
+    	var today = new Date();
+    	var year = today.getFullYear();
+    	var month = ("0"+(today.getMonth() + 1)).slice(-2);
+    	var date =  ("0"+today.getDate()).slice(-2);
+    	var YMD = year + "-" + month + "-" + date;
+
+    	//登録初回用
+    	var RecordList = [[${RecordList}]];
+    	var registration = false;
+
+    	//テーブル参照用
+    	var recordList = [[${recordList}]];
+
+    	//recordList(recordテーブル)と、登録時のrecord_date, location_idを比較
+    	function registrationEntry() {
+    		recordList.forEach( function( value ){
+    			if(value.record_date.slice(0,10) == YMD && value.location_id == registrationLocationId) {
+    				registration = true;
+    				return registration;
+    			}
+    		})
     	}
+		console.log(today);
+		console.log(secound_today);
+    	if(today <= secound_today){
+	   		alert("現在または過去の時刻を記録してください！");
+	   		return;
+	   	}
+    	if(mode == 1) {
+    		registrationEntry();
+    		if(registration == false){
+    			var entry_regist = document.getElementById("entry_time");
+        		alert("入室時間を記録しました。");
+        		entry_regist.innerHTML = "<input name = entry_time id= entry_time value= '"+ regist_time +"' type= hidden>";
+        		$('form').attr('action',"/recordDetail/regist/1");
+        		$("#form").submit();
+    		}else {
+        		alert('本日の入室時間は登録済みです。');
+        		$('form').attr('action',"/");
+        		$("#form").submit();
+       		}
+    	}else if(mode == 2) {
+    		var entry_regist = document.getElementById("exit_time");
+        	alert("退室時間を記録しました。");
+        	entry_regist.innerHTML = "<input name = exit_time id= exit_time value= '"+ regist_time +"' type= hidden>";
+        	$('form').attr('action',"/recordDetail/regist/2");
+        	$("#form").submit();
+        }else {
+        	alert("error: 入退室時間を記録できませんでした。");
+        }
+
     }
 
     function Firstlocation(){
@@ -146,9 +182,7 @@
     	    //cookie名と値に分ける
     	     content = value.split('=');
 
-    	    console.log( content[0] );
     	})
-    	console.log(typeof content[0]);
     	if(content[0] != ""){
     		var location_T = [[${locationList}]];
     		for(i = 0; i < location_T.length;i++){
@@ -168,6 +202,7 @@
     }
 
   	var today = new Date();
+  	var seconds = today.getSeconds();
   	var year_element = document.getElementById("year");
 	var month_element = document.getElementById("month");
 	var hours_element = document.getElementById("hours");

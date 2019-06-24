@@ -1,9 +1,10 @@
 package jp.co.isopra.entryandexit.service;
 
+
 import java.sql.Timestamp;
+import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,8 @@ public class RecordService {
 	@Autowired
 	private RecordRepository recordRepository;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	@Autowired
+	EntityManager entityManager;
 
 	public Record registerRecord(Record entity) {
 
@@ -28,6 +29,7 @@ public class RecordService {
 
 		return entity;
 	}
+
 
 	public int update(String record_date, int location_id, int exit_member_id, Timestamp exit_time,Timestamp created_time) {
 		return entityManager
@@ -38,6 +40,14 @@ public class RecordService {
 								"location_id="+ location_id)
 				.executeUpdate();
 	}
+
+
+	@SuppressWarnings("unchecked")
+	public List<Record> searchEntry(String record_date) {
+		return (List<Record>)entityManager
+				.createQuery("from Record where record_date = \'" + record_date + "\'")
+				.getResultList();
+		}
 
 
 }

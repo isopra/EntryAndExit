@@ -1,5 +1,7 @@
 package jp.co.isopra.entryandexit.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,7 @@ public class HeloController {
 	@Autowired
 	LocationService locationService;
 
+
 	@RequestMapping("/")
 	public String index() {
 		return "index";
@@ -62,7 +65,11 @@ public class HeloController {
 		List<Location> locationList =  locationService.getAll();
 		Iterable<Member> memberList = memberRepository.findAllOrderById();
 		Iterable<Record>recordList = recordRepository.findAll();
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		List<Record>RecordList = recordService.searchEntry(sdf.format(date));
 		mav.addObject("recordList", recordList);
+		mav.addObject("RecordList", RecordList);
 		mav.addObject("locationList", locationList);
 		mav.addObject("memberList", memberList);
 		mav.addObject("personId", sendPersonId);
