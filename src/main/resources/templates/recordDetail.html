@@ -119,10 +119,6 @@
 
 
     	//登録時の時間(record_date)
-    	var today = new Date();
-    	var year = today.getFullYear();
-    	var month = ("0"+(today.getMonth() + 1)).slice(-2);
-    	var date =  ("0"+today.getDate()).slice(-2);
     	var YMD = year_element_val + "-" + month_element_val + "-"+ day_element_val;
 
     	//登録初回用
@@ -215,48 +211,17 @@
     	var month_now = today.getMonth() + 1;
     	var hours_now = today.getHours();
     	var minutes_now = today.getMinutes();
-    	var year_opt,month_opt,hours_opt,minutes_opt;
+    	var year_opt;
 
     	year_opt += "<option value='"+ year_now +"'selected>" + year_now + "</option>";
     	year_now--;
     	year_opt += "<option value='"+ year_now +"'>" + year_now + "</option>";
-    	for(i = 1; i <= 12;i++){
-    		if(i <= 9){
-    			var zero = "0"+i;
-        		if(i==month_now){
-        			month_opt +="<option value='"+ zero +"' selected>" +zero + "</option>";
-        		}else{
-        		month_opt +="<option value='"+ zero +"' >" + zero + "</option>";
-        		}
 
-    		}
-    		else{
-    			if(i==month_now){
-        			month_opt +="<option value='"+ zero +"' selected>" +zero + "</option>";
-        		}else{
-        		month_opt +="<option value='"+ zero +"' >" + zero + "</option>";
-        		}
-    		}
+    	addZero(1,12,month_now,month_element);
+    	addZero(0,23,hours_now,hours_element);
+    	addZero(0,59,minutes_now,minutes_element);
 
-    	}
-    	for(i = 0; i <= 23;i++){
-    		if(i==hours_now){
-    			hours_opt +="<option value='"+ i +"' selected>" + i + "</option>";
-    		}else{
-    		hours_opt +="<option value='"+ i +"' >" + i + "</option>";
-    		}
-    	}
-    	for(i = 0; i <= 59;i++){
-    		if(i==minutes_now){
-    			minutes_opt +="<option value='"+ i +"' selected>" + i + "</option>";
-    		}else{
-    		minutes_opt +="<option value='"+ i +"' >" + i + "</option>";
-    		}
-    	}
     	year_element.innerHTML = year_opt;
-    	month_element.innerHTML = month_opt;
-    	hours_element.innerHTML = hours_opt;
-    	minutes_element.innerHTML = minutes_opt;
     	}
 
     var getMonthDays = function(year, month) {
@@ -264,30 +229,34 @@
 	};
 
     function dayChange(){
-    	var day_opt;
     	var day_now = today.getDate();
     	var year_element_val = document.getElementById("year").value;
     	var month_element_val = document.getElementById("month").value;
     	var sue = getMonthDays(year_element_val,month_element_val);
 
-    	for(i =1; i <= sue;i++){
-    		if(i <= 9){
-    			var zero = "0"+i;
-    			if(i==day_now){
-        			day_opt += "<option value='"+ zero +"' selected>" + zero + "</option>";
+    	addZero(0,sue,day_now,day_element);
+    }
+
+    function addZero(ival,maxval,now,element){
+    	var opt = "";
+    	for(ival; ival <= maxval;ival++){
+    		if(ival <= 9){
+    			var zero = "0"+ival;
+    			if(ival == now){
+        			opt += "<option value='"+ zero +"' selected>" + zero + "</option>";
         		}else{
-        			day_opt += "<option value='"+ zero +"'>" + zero + "</option>";
+        			opt += "<option value='"+ zero +"'>" + zero + "</option>";
         		}
     		}else{
-    			if(i==day_now){
-        			day_opt += "<option value='"+ i +"' selected>" + i + "</option>";
+    			if(ival==now){
+        			opt += "<option value='"+ ival +"' selected>" + ival + "</option>";
         		}else{
-        			day_opt += "<option value='"+ i +"'>" + i + "</option>";
+        			opt += "<option value='"+ ival +"'>" + ival + "</option>";
         		}
     		}
 
     	}
-    	day_element.innerHTML = day_opt;
+    	element.innerHTML = opt;
     }
     </script>
 
